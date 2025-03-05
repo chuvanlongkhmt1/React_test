@@ -1,0 +1,23 @@
+.container {
+  height: auto;
+  padding: 16px;
+  margin: 10px 20px;
+  line-height: inherit;
+  border-radius: 12px;
+  transition: 0.2s;
+}
+
+h4 {
+  margin: 5px 0;
+}
+
+a {
+  color: #141414 !important;
+}
+
+.box {
+  align-items: center;
+  display: flex;
+  display: -webkit-flex;
+  justify-content: space-between;
+}/*# sourceMappingURL=styles.module.css.map */

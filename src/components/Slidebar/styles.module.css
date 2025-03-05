@@ -1,0 +1,71 @@
+.iconimg {
+  height: 30px;
+}
+
+.slidebar {
+  display: block;
+}
+
+.textdask {
+  color: #141414;
+}
+
+.textdask:hover {
+  color: #141414;
+}
+
+.brand {
+  font-weight: 600;
+  display: flex;
+}
+
+hr {
+  margin: 18px 0;
+  border: none;
+  height: 1px;
+  background-color: white;
+}
+
+p {
+  margin: 3px;
+}
+
+.support {
+  border-radius: 10px;
+  background: rgb(24, 144, 255);
+  margin: 5px;
+  padding: 16px;
+}
+
+.textwhile {
+  color: white;
+  margin-bottom: 14px;
+}
+
+.texthelp {
+  font-size: 16px;
+  font-weight: 600;
+  color: white;
+  margin: 0;
+  margin-top: 15px;
+}
+
+.boxicon {
+  background-color: #f5f5f5;
+  border-radius: 5px;
+  padding: 5px 7px;
+}
+
+.boxsupport {
+  padding-top: 100px;
+  padding-bottom: 33px;
+}
+
+.boxmenu {
+  padding: 13px 20px;
+  height: 100vh;
+}
+
+.menuStyle {
+  border-inline-end: none !important;
+}/*# sourceMappingURL=styles.module.css.map */
