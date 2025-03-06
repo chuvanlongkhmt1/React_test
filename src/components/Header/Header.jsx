@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { SearchOutlined } from "@ant-design/icons";
+import { Link } from "react-router-dom";
 import {
   Button,
   Flex,
@@ -11,8 +12,8 @@ import {
   Space,
   Switch,
   Radio,
-  Card,
   List,
+  FloatButton,
 } from "antd";
 import styles from "./styles.module.scss";
 import {
@@ -24,8 +25,8 @@ import {
   StarOutlined,
   HistoryOutlined,
 } from "@ant-design/icons";
-import Title from "antd/es/skeleton/Title";
-function Header() {
+
+function Header(props) {
   const [open, setOpen] = useState(false);
   const showDrawer = () => {
     setOpen(true);
@@ -50,32 +51,72 @@ function Header() {
       time: "2 day ago",
     },
   ];
-  const onChange = (value) => {
-    console.log(value);
-  };
   const onChanges = (checked) => {
     console.log(`switch to ${checked}`);
   };
-  const { container, box } = styles;
+  const { box } = styles;
+  const headerstyle = {
+    background: "none",
+    padding: "20px 40px",
+  };
+
+  const isLoggedIn = false;
   return (
     <>
-      <div>
+      <FloatButton icon={<SettingOutlined />} onClick={showDrawer} />
+      <div style={headerstyle}>
         <Flex wrap justify="space-between">
-          <div>
-            <Breadcrumb>
-              <Breadcrumb.Item>Pages</Breadcrumb.Item>
-              <Breadcrumb.Item>Dashboard</Breadcrumb.Item>
-            </Breadcrumb>
-            <h3 style={{ lineHeight: "16px" }}>Dashboard</h3>
-          </div>
+          {isLoggedIn ? (
+            <div>
+              <Breadcrumb>
+                <Breadcrumb.Item style={{ color: "white" }}>
+                  Pages
+                </Breadcrumb.Item>
+                <Breadcrumb.Item style={{ color: "white" }}>
+                  {props.getTitle()}
+                </Breadcrumb.Item>
+              </Breadcrumb>
+              <h3 style={{ lineHeight: "16px", color: "white" }}>
+                {props.getTitle()}
+              </h3>
+            </div>
+          ) : (
+            <div>
+              <Breadcrumb>
+                <Breadcrumb.Item>Pages</Breadcrumb.Item>
+                <Breadcrumb.Item>{props.getTitle()}</Breadcrumb.Item>
+              </Breadcrumb>
+              <h3 style={{ lineHeight: "16px" }}>{props.getTitle()}</h3>
+            </div>
+          )}
           <Flex wrap gap="small" className={box}>
-            <Button icon={<SearchOutlined />}>type here</Button>
-            <a href="/signin" gap="small">
-              <Avatar size="small" icon={<UserOutlined />} />
-              Sign in
-            </a>
+            <Button
+              style={{ width: "200px", height: "40px" }}
+              icon={<SearchOutlined />}
+            >
+              type here
+            </Button>
+            <Link to="/signin">
+              <Avatar
+                style={{
+                  backgroundColor: "black",
+                  color: "white",
+                  marginRight: "5px",
+                }}
+                size={20}
+                icon={<UserOutlined />}
+              />
+              <span>Sign In</span>
+            </Link>
             <Button type="text" onClick={showDrawer}>
-              <SettingOutlined />
+              <Avatar
+                style={{
+                  backgroundColor: "#f5f5f5",
+                  color: "black",
+                }}
+                size="small"
+                icon={<SettingOutlined />}
+              />
             </Button>
             <Dropdown
               trigger={["click"]}
@@ -118,11 +159,18 @@ function Header() {
                 </>
               )}
             >
-              <Badge count={3}>
-                <Button type="text">
-                  <BellOutlined />
-                </Button>
-              </Badge>
+              <Button type="text">
+                <Badge count={3}>
+                  <Avatar
+                    style={{
+                      backgroundColor: "#f5f5f5",
+                      color: "black",
+                    }}
+                    shape="square"
+                    icon={<BellOutlined />}
+                  />
+                </Badge>
+              </Button>
             </Dropdown>
           </Flex>
         </Flex>

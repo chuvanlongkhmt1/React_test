@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import ReactDOM from "react-dom/client";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import imgicon from "../../assets/images/icondas.png";
 import { Button } from "antd";
 import {
@@ -47,22 +47,22 @@ const items = [
     type: "group",
     children: [
       {
-        key: "2",
+        key: "/",
         icon: <FundOutlined />,
         label: <Link to="/">Dashboard</Link>,
       },
       {
-        key: "3",
+        key: "/table",
         icon: <TableOutlined />,
         label: <Link to="/table">Table</Link>,
       },
       {
-        key: "4",
+        key: "/billing",
         icon: <CreditCardOutlined />,
-        label: "Billing",
+        label: <Link to="/billing">Billing</Link>,
       },
       {
-        key: "5",
+        key: "/rtl",
         icon: <CaretLeftOutlined />,
         label: "RTL",
       },
@@ -74,24 +74,30 @@ const items = [
     type: "group",
     children: [
       {
-        key: "7",
+        key: "/profile",
         icon: <UserOutlined />,
-        label: "Profile",
+        label: <Link to="/profile">Profile</Link>,
       },
       {
-        key: "8",
+        key: "signin",
         icon: <LoginOutlined />,
         label: <Link to="/signin">Sign In</Link>,
       },
       {
-        key: "9",
+        key: "signup",
         icon: <LogoutOutlined />,
-        label: "Sign Out",
+        label: <Link to="/signup">Sign Up</Link>,
       },
     ],
   },
 ];
+
 function Slidebar() {
+  const onClick = (e) => {
+    console.log("click ", e);
+  };
+  const location = useLocation();
+  console.log(location.pathname);
   return (
     <>
       <div className={pos}>
@@ -99,8 +105,10 @@ function Slidebar() {
           <Menu
             style={{
               background: "none",
+              borderInlineEnd: "none",
             }}
-            className={menuStyle}
+            onClick={onClick}
+            defaultSelectedKeys={location.pathname}
             items={items}
           />
 

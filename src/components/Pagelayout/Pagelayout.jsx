@@ -1,12 +1,10 @@
 import Slidebar from "../Slidebar/Slidebar";
-import Headerr from "../Header/Header";
 import Footerr from "../Footer/Footer";
-import { Layout, FloatButton } from "antd";
+import { Layout } from "antd";
 import { SettingOutlined } from "@ant-design/icons";
 import ReactDOM from "react-dom/client";
-import { BrowserRouter, Routes, Route } from "react-router";
 import { Outlet, Link } from "react-router-dom";
-const { Header, Footer, Sider, Content } = Layout;
+const { Footer, Sider, Content } = Layout;
 function Pagelayout() {
   const siderStyle = {
     overflow: "auto",
@@ -26,10 +24,6 @@ function Pagelayout() {
           <Slidebar />
         </Sider>
         <Layout>
-          <FloatButton icon={<SettingOutlined />} />
-          <Header style={{ background: "none", padding: "20px 50px" }}>
-            <Headerr />
-          </Header>
           <Content>
             <Outlet />
           </Content>

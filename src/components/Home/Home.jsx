@@ -20,8 +20,13 @@ function Home() {
     xField: "year",
     yField: "value",
   };
+  const title = "Dashboard";
+  const getTitle = () => {
+    return title;
+  };
   return (
     <>
+      <Header getTitle={getTitle} />
       <div>
         <div>
           <div>

@@ -15,6 +15,7 @@ import {
   Flex,
   Layout,
   Menu,
+  Checkbox,
 } from "antd";
 import {
   ChromeOutlined,
@@ -25,17 +26,21 @@ import {
   FundOutlined,
   UserOutlined,
   LoginOutlined,
-  LogoutOutlined,
+  FacebookFilled,
+  GoogleCircleFilled,
+  AppleFilled,
 } from "@ant-design/icons";
-const Signin = () => {
+const Signup = () => {
   const headerStyle = {
+    padding: "0px",
+    height: "550px",
+    borderRadius: "12px",
+    boxShadow: "0 20px 27px rgb(0 0 0 / 5%)",
+    backgroundSize: "cover",
+    backgroundPosition: "50%",
     textAlign: "center",
-    color: "#141414",
-    height: 64,
-    paddingInline: 48,
-    lineHeight: "64px",
-    background: "rgb(255, 255, 255)",
-    boxShadow: "rgba(0, 0, 0, 0.05) 0px 20px 27px",
+    background:
+      "url(https://demos.creative-tim.com/muse-ant-design-dashboard/static/media/bg-signup.bec2ba70.jpg",
   };
   const contentStyle = {
     minHeight: 120,
@@ -54,6 +59,7 @@ const Signin = () => {
     width: "100%",
     maxWidth: "100%",
     backgroundColor: "#fff",
+    padding: "11px",
   };
   const [componentSize, setComponentSize] = useState("default");
   const onFormLayoutChange = ({ size }) => {
@@ -118,18 +124,27 @@ const Signin = () => {
       icon: <LoginOutlined />,
       label: <Link to="/signin">Sign In</Link>,
     },
-    {
-      key: "4",
-      icon: <LogoutOutlined />,
-      label: <Link to="/signup">Sign Up</Link>,
-    },
   ];
+  const onChange = (e) => {
+    console.log(`checked = ${e.target.checked}`);
+  };
   return (
     <Layout style={layoutStyle}>
       <Header style={headerStyle}>
-        <Flex align="center" justify="space-between">
+        <Flex
+          align="center"
+          justify="space-between"
+          style={{
+            backgroundColor: "transparent",
+            color: "#fff",
+            margin: "0",
+            padding: "0 20px",
+            zIndex: "1",
+          }}
+        >
           <h3 style={{ margin: "0px" }}>Muse Dashboard</h3>
           <Menu
+            theme="dark"
             items={menu}
             style={{
               background: "none",
@@ -138,42 +153,102 @@ const Signin = () => {
               border: "none",
             }}
           ></Menu>
-          <Button type="primary">Free Download</Button>
+          <Button ghost>Free Download</Button>
         </Flex>
       </Header>
       <Content style={contentStyle}>
         <>
           <Flex justify="space-around">
-            <div style={{ marginLeft: "8%", maxWidth: "310px" }}>
+            <div
+              style={{
+                maxWidth: "500px",
+                margin: "-400px auto 120px",
+              }}
+            >
+              <div
+                style={{
+                  textAlign: "center",
+                }}
+              >
+                <h1
+                  style={{
+                    fontWeight: "600",
+                    color: "#ffff",
+                    fontSize: "50px",
+                    whiteSpace: "normal",
+                    margin: "0px",
+                    lineHeight: "50px",
+                  }}
+                >
+                  Sign Up
+                </h1>
+                <h3
+                  style={{
+                    fontWeight: "400",
+                    color: "#ffff",
+                    fontSize: "15px",
+                    whiteSpace: "normal",
+                    margin: "40px 0",
+                    lineHeight: "20px",
+                  }}
+                >
+                  Use these awesome forms to login or create new account in your
+                  project for free.
+                </h3>
+              </div>
               <Form
                 initialValues={{
                   size: componentSize,
                 }}
                 onValuesChange={onFormLayoutChange}
                 size={componentSize}
+                style={{
+                  padding: "16px",
+                  background: "rgb(255, 255, 255)",
+                  boxShadow: "0 20px 27px rgb(0 0 0 / 5%)",
+                  borderRadius: "12px",
+                  textAlign: "center",
+                }}
               >
-                <h1
-                  style={{ fontSize: "48px", fontWeight: "700", margin: "0px" }}
+                <h3 style={{ marginBottom: "30px" }}>Register With</h3>
+                <Flex
+                  gap="20px"
+                  justify="space-around"
+                  style={{ padding: "0 40px" }}
                 >
-                  Sign In
-                </h1>
-                <h5
+                  <Button style={{ padding: "30px 40px" }}>
+                    <FacebookFilled
+                      style={{ color: "blue", fontSize: "30px" }}
+                    />
+                  </Button>
+                  <Button style={{ padding: "30px 40px" }}>
+                    <AppleFilled style={{ fontSize: "30px" }} />
+                  </Button>
+                  <Button style={{ padding: "30px 40px" }}>
+                    <GoogleCircleFilled
+                      style={{ fontSize: "30px" }}
+                      twoToneColor="#eb2f96"
+                    />
+                  </Button>
+                </Flex>
+                <h6
                   style={{
                     fontWeight: "400",
                     color: "#8c8c8c",
-                    fontSize: "20px",
+                    fontSize: "15px",
                     whiteSpace: "normal",
-                    marginBottom: "0px",
+                    margin: "25px",
                   }}
                 >
-                  Enter your email and password to sign in
-                </h5>
+                  Or
+                </h6>
                 <Form.Item>
-                  <h3>Email</h3>
+                  <Input placeholder="Name" />
+                </Form.Item>
+                <Form.Item>
                   <Input placeholder="Email" />
                 </Form.Item>
                 <Form.Item>
-                  <h3>Password</h3>
                   <Input placeholder="Password" />
                 </Form.Item>
                 <Form.Item valuePropName="checked">
@@ -181,12 +256,14 @@ const Signin = () => {
                     gap="8px"
                     style={{
                       fontWeight: "400",
-                      color: "#8c8c8c",
+                      //   color: "#8c8c8c",
                       fontSize: "15px",
                     }}
                   >
-                    <Switch />
-                    Remember me
+                    <Checkbox onChange={onChange} />I agree the
+                    <a href="javascrip:;">
+                      <h4 style={{ margin: "0px" }}>Terms and Conditions</h4>
+                    </a>
                   </Flex>
                 </Form.Item>
                 <Form.Item>
@@ -197,7 +274,7 @@ const Signin = () => {
                     }}
                     type="primary"
                   >
-                    Sign In
+                    Sign Up
                   </Button>
                 </Form.Item>
                 <Flex gap="3px">
@@ -208,22 +285,15 @@ const Signin = () => {
                       color: "#8c8c8c",
                     }}
                   >
-                    Don't have an account?
+                    Already have an account?
                   </h3>
-                  <Link to="/signup">
+                  <Link to="/signin">
                     <a href="javascrip:;">
-                      <h3 style={{ margin: "0px" }}>Sign Up</h3>
+                      <h3 style={{ margin: "0px" }}>Sign In</h3>
                     </a>
                   </Link>
                 </Flex>
               </Form>
-            </div>
-            <div>
-              <img
-                style={{ height: "667px" }}
-                src="https://demos.creative-tim.com/muse-ant-design-dashboard/static/media/img-signin.cba9a972.jpg"
-                alt=""
-              />
             </div>
           </Flex>
         </>
@@ -272,4 +342,4 @@ const Signin = () => {
     </Layout>
   );
 };
-export default Signin;
+export default Signup;

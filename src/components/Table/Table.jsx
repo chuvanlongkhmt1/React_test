@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import styles from "./styles.module.scss";
+import Header from "../Header/Header";
 import {
   Space,
   Table,
@@ -15,7 +15,11 @@ import {
 } from "antd";
 import { UserOutlined, UploadOutlined, EditFilled } from "@ant-design/icons";
 function Tables() {
-  const { Column, ColumnGroup } = Table;
+  const title = "Table";
+  const getTitle = () => {
+    return title;
+  };
+  const { Column } = Table;
   const [position, setPosition] = useState("end");
   const [position1, setPosition1] = useState("stores");
   const data = [
@@ -83,6 +87,7 @@ function Tables() {
   };
   return (
     <>
+      <Header getTitle={getTitle} />
       <div style={{ padding: "20px 20px 0 20px" }}>
         <div
           style={{
