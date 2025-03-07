@@ -63,7 +63,7 @@ function Header(props) {
   const isLoggedIn = false;
   return (
     <>
-      <FloatButton icon={<SettingOutlined />} onClick={showDrawer} />
+      <FloatButton icon={<SettingOutlined spin />} onClick={showDrawer} />
       <div style={headerstyle}>
         <Flex wrap justify="space-between">
           {isLoggedIn ? (
