@@ -58,6 +58,10 @@ function Header(props) {
   const headerstyle = {
     background: "none",
     padding: "20px 40px",
+    position: "relative",
+    with: "80%",
+    top: "0px",
+    zIndex: "1",
   };
 
   const isLoggedIn = false;
@@ -66,29 +70,13 @@ function Header(props) {
       <FloatButton icon={<SettingOutlined spin />} onClick={showDrawer} />
       <div style={headerstyle}>
         <Flex wrap justify="space-between">
-          {isLoggedIn ? (
-            <div>
-              <Breadcrumb>
-                <Breadcrumb.Item style={{ color: "white" }}>
-                  Pages
-                </Breadcrumb.Item>
-                <Breadcrumb.Item style={{ color: "white" }}>
-                  {props.getTitle()}
-                </Breadcrumb.Item>
-              </Breadcrumb>
-              <h3 style={{ lineHeight: "16px", color: "white" }}>
-                {props.getTitle()}
-              </h3>
-            </div>
-          ) : (
-            <div>
-              <Breadcrumb>
-                <Breadcrumb.Item>Pages</Breadcrumb.Item>
-                <Breadcrumb.Item>{props.getTitle()}</Breadcrumb.Item>
-              </Breadcrumb>
-              <h3 style={{ lineHeight: "16px" }}>{props.getTitle()}</h3>
-            </div>
-          )}
+          <div>
+            <Breadcrumb>
+              <Breadcrumb.Item>Pages</Breadcrumb.Item>
+              <Breadcrumb.Item>{props.getTitle()}</Breadcrumb.Item>
+            </Breadcrumb>
+            <h3 style={{ lineHeight: "16px" }}>{props.getTitle()}</h3>
+          </div>
           <Flex wrap gap="small" className={box}>
             <Button
               style={{ width: "200px", height: "40px" }}

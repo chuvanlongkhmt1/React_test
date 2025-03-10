@@ -27,9 +27,7 @@ function Pagelayout() {
           <Content>
             <Outlet />
           </Content>
-          <Footer>
-            <Footerr />
-          </Footer>
+          <Footer>{/* <Footerr /> */}</Footer>
         </Layout>
       </Layout>
     </div>

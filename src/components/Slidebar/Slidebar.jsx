@@ -62,6 +62,11 @@ const items = [
         label: <Link to="/billing">Billing</Link>,
       },
       {
+        key: "/listmus",
+        icon: <CreditCardOutlined />,
+        label: <Link to="/listmus">Listmus</Link>,
+      },
+      {
         key: "/rtl",
         icon: <CaretLeftOutlined />,
         label: "RTL",
@@ -97,7 +102,6 @@ function Slidebar() {
     console.log("click ", e);
   };
   const location = useLocation();
-  console.log(location.pathname);
   return (
     <>
       <div className={pos}>

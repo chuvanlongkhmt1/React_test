@@ -11,7 +11,7 @@ import {
   Divider,
   message,
   Upload,
-  Progress,
+  List,
   Row,
   Col,
   Card,
@@ -20,12 +20,40 @@ import {
   WifiOutlined,
   CaretUpOutlined,
   PinterestOutlined,
+  VerticalAlignBottomOutlined,
 } from "@ant-design/icons";
 function Billing() {
   const title = "Billing";
   const getTitle = () => {
     return title;
   };
+  const data = [
+    {
+      date: "March, 01, 2021",
+      code: "#MS-415646",
+      money: "$180",
+    },
+    {
+      date: "March, 01, 2021",
+      code: "#MS-415646",
+      money: "$180",
+    },
+    {
+      date: "March, 01, 2021",
+      code: "#MS-415646",
+      money: "$180",
+    },
+    {
+      date: "March, 01, 2021",
+      code: "#MS-415646",
+      money: "$180",
+    },
+    {
+      date: "March, 01, 2021",
+      code: "#MS-415646",
+      money: "$180",
+    },
+  ];
   return (
     <>
       <Header getTitle={getTitle} />
@@ -205,8 +233,56 @@ function Billing() {
             </Row>
           </Col>
           <Col span={8}>
-            <Card title="Default size card" extra={<a href="#">More</a>}>
-              a
+            <Card>
+              <Flex
+                justify="space-between"
+                style={{ padding: "0 5px 20px 5px", alignItems: "center" }}
+              >
+                <h3>Invoices</h3>
+                <Button type="primary" style={{ padding: "20px" }}>
+                  VIEW ALL
+                </Button>
+              </Flex>
+              <List
+                dataSource={data}
+                renderItem={(item) => (
+                  <List.Item
+                    style={{
+                      border: "none",
+                      gap: "10px",
+                    }}
+                  >
+                    {
+                      <>
+                        <div>
+                          <h4>{item.date}</h4>
+                          <p
+                            style={{
+                              margin: "0px",
+                              color: "rgb(140, 140, 140)",
+                            }}
+                          >
+                            {item.code}
+                          </p>
+                        </div>
+                        <p
+                          style={{
+                            margin: "0px",
+                            color: "rgb(140, 140, 140)",
+                            fontSize: "12px",
+                          }}
+                        >
+                          {item.money}
+                        </p>
+                        <Flex gap={7}>
+                          <VerticalAlignBottomOutlined />
+                          <p>PDF</p>
+                        </Flex>
+                      </>
+                    }
+                  </List.Item>
+                )}
+              />
             </Card>
           </Col>
         </Row>
