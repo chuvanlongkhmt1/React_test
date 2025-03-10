@@ -29,15 +29,12 @@ function Listmus() {
   const getTitle = () => {
     return title;
   };
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const showModal = () => {
-    setIsModalOpen(true);
-  };
-  const handleOk = () => {
-    setIsModalOpen(false);
-  };
-  const handleCancel = () => {
-    setIsModalOpen(false);
+  const [isModalOpen, setIsModalOpen] = useState([false, false]);
+  const toggleModal = (idx, target) => {
+    setIsModalOpen((p) => {
+      p[idx] = target;
+      return [...p];
+    });
   };
   return (
     <>
@@ -85,20 +82,29 @@ function Listmus() {
                   </div>
                 </Flex>
                 <p>tổng thời gian nấu: {item.totalTime} phút</p>
-                <Button type="primary" onClick={showModal}>
+                <Button
+                  type="primary"
+                  onClick={() => toggleModal(item.id, true)}
+                >
                   Chi tiết
                 </Button>
                 <Modal
                   title={item.title}
-                  open={isModalOpen}
-                  onCancel={handleCancel}
+                  open={isModalOpen[item.id]}
+                  onCancel={() => toggleModal(item.id, false)}
+                  onOk={{ style: { display: "none" } }}
                 >
                   <Flex justify="space-around">
+                    <Avatar shape="square" size={100}>
+                      <img src={item.photoUrl} alt="" />
+                    </Avatar>
                     <p>Thời gian chuẩn bị: {item.prepTime}</p>
                     <p>Thời gian nấu: {item.cookTime}</p>
                     <p>Thời gian nấu: {item.totalTime}</p>
                   </Flex>
                   <p>Mô tả: {item.description}</p>
+                  <p>Chuẩn bị thực phẩm: {item.ingredients}</p>
+                  <p>Công thức nấu: {item.directions}</p>
                   <p>
                     Tham khảo:
                     <a href={item.source} target="_blank">
