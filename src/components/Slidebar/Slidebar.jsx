@@ -67,6 +67,11 @@ const items = [
         label: <Link to="/listmus">Listmus</Link>,
       },
       {
+        key: "/users",
+        icon: <CreditCardOutlined />,
+        label: <Link to="/users">Users</Link>,
+      },
+      {
         key: "/rtl",
         icon: <CaretLeftOutlined />,
         label: "RTL",

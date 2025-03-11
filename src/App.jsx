@@ -5,6 +5,9 @@ import Signup from "./components/Signup/Signup";
 import Table from "./components/Table/Table";
 import Billing from "./components/Billing/Billing";
 import Listmus from "./components/Listmus/Listmus";
+import Users from "./components/Users/Users";
+import Usercreate from "./components/Users/Usercreate";
+import Useredit from "./components/Users/Useredit";
 import ReactDOM from "react-dom/client";
 import { BrowserRouter, Routes, Route } from "react-router";
 import Profile from "./components/Profile/Profile";
@@ -20,6 +23,9 @@ function App() {
             <Route path="profile" element={<Profile />} />
             <Route path="billing" element={<Billing />} />
             <Route path="listmus" element={<Listmus />} />
+            <Route path="users" element={<Users />} />
+            <Route path="users/create" element={<Usercreate />} />
+            <Route path="users/edit" element={<Useredit />} />
           </Route>
           <Route path="signin" element={<Signin />}></Route>
           <Route path="signup" element={<Signup />}></Route>
