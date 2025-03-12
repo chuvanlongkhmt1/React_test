@@ -24,8 +24,8 @@ function App() {
             <Route path="billing" element={<Billing />} />
             <Route path="listmus" element={<Listmus />} />
             <Route path="users" element={<Users />} />
-            <Route path="users/create" element={<Usercreate />} />
-            <Route path="users/edit" element={<Useredit />} />
+            <Route path="users/create/" element={<Usercreate />} />
+            <Route path="users/edit/:id" element={<Useredit />} />
           </Route>
           <Route path="signin" element={<Signin />}></Route>
           <Route path="signup" element={<Signup />}></Route>
