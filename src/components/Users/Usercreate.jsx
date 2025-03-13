@@ -1,36 +1,34 @@
 import React, { useEffect, useState } from "react";
 import Header from "../Header/Header";
-import { Button, Flex, Alert, Form, Input, Card } from "antd";
+import { Button, Form, Input, Card } from "antd";
 import {} from "@ant-design/icons";
 import axios from "axios";
+import Swal from "sweetalert2";
+window.Swal = Swal;
 function Usercreate() {
-  const [name, setName] = useState("");
-  const [age, setAge] = useState("");
-  const [id, setId] = useState("");
-  // const showAlert = () => {
-  //   return (
-  //     <Alert
-  //       message="Success Tips"
-  //       description="Detailed description and advice about successful copywriting."
-  //       type="success"
-  //       showIcon
-  //     />
-  //   );
-  // };
-  const handleSubmit = () => {
-    let user = { name: name, age: age };
+  const [form] = Form.useForm();
+  const onFinish = async ({ user }) => {
     axios
       .post("http://127.0.0.1:3000/users", user)
       .then(function (response) {
         console.log(response.data);
+        Swal.fire({
+          icon: "success",
+          title: `Tạo người dùng mới thành công`,
+          showConfirmButton: false,
+          timer: 1500,
+        });
       })
       .catch(function (error) {
         console.log(error);
+        Swal.showValidationMessage(err.response.data.message);
       });
-    setAge("");
-    setName("");
   };
-  // const title = ["Users", "Create"];
+
+  const onFinishFailed = (errorInfo) => {
+    console.error("Failed:", errorInfo);
+  };
+
   const title = "Create";
   const getTitle = () => {
     return title;
@@ -39,34 +37,30 @@ function Usercreate() {
     <>
       <Header getTitle={getTitle}></Header>
       <div style={{ padding: "20px 40px" }}>
-        <Card>
-          <Form>
-            <h3>Thêm người dùng</h3>
-            <Form.Item>
-              <Input
-                type="text"
-                placeholder="Name"
-                value={name}
-                onChange={(e) => setName(e.target.value)}
-              />
+        <Card title="Thêm người dùng" style={{ padding: "20px 40px" }}>
+          <Form
+            form={form}
+            name="Usercreate"
+            onFinish={onFinish}
+            onFinishFailed={onFinishFailed}
+            // validateMessages={validateMessages}
+          >
+            <Form.Item
+              name={["user", "name"]}
+              label="Name"
+              rules={[{ required: true }]}
+            >
+              <Input />
+            </Form.Item>
+            <Form.Item
+              name={["user", "age"]}
+              label="Age"
+              rules={[{ required: true }]}
+            >
+              <Input />
             </Form.Item>
             <Form.Item>
-              <Input
-                placeholder="Age"
-                type="text"
-                value={age}
-                onChange={(e) => setAge(e.target.value)}
-              />
-            </Form.Item>
-            <Form.Item>
-              <Button
-                style={{
-                  width: "100%",
-                  height: "40px",
-                }}
-                type="primary"
-                onClick={handleSubmit}
-              >
+              <Button type="primary" htmlType="submit">
                 Thêm mới
               </Button>
             </Form.Item>
