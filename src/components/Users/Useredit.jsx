@@ -6,6 +6,7 @@ import {} from "@ant-design/icons";
 import axios from "axios";
 import Swal from "sweetalert2";
 window.Swal = Swal;
+import moment from "moment";
 function Useredit() {
   let { id } = useParams();
   const title = "Edit";
@@ -44,7 +45,7 @@ function Useredit() {
   const onFinishFailed = (errorInfo) => {
     console.error("Failed:", errorInfo);
   };
-  if (!user) return null;
+  // if (!user) return null;
   return (
     <>
       <Header getTitle={getTitle}></Header>

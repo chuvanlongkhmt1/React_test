@@ -1,11 +1,13 @@
 import React, { useEffect, useState, useRef } from "react";
 import Header from "../Header/Header";
-import { Space, Button, Flex, Popconfirm, Table } from "antd";
+import { Space, Button, Flex, Popconfirm, Table, Input } from "antd";
 import { Link } from "react-router-dom";
 import Highlighter from "react-highlight-words";
 import { SearchOutlined } from "@ant-design/icons";
 import axios from "axios";
 import Swal from "sweetalert2";
+import moment from "moment";
+import dayjs from "dayjs";
 function Users() {
   const [users, setUsers] = useState([]);
   const handleDelete = (id) => {
@@ -163,22 +165,37 @@ function Users() {
       title: "Name",
       dataIndex: "name",
       key: "name",
-      // ...getColumnSearchProps("name"),
+      ...getColumnSearchProps("name"),
+      sorter: (a, b) => a.name.length - b.name.length,
+      sortDirections: ["descend", "ascend"],
     },
     {
       title: "Age",
       dataIndex: "age",
       key: "age",
+      ...getColumnSearchProps("age"),
+      sorter: (a, b) => a.age - b.age,
+      sortDirections: ["descend", "ascend"],
     },
     {
       title: "Date-create",
       dataIndex: "created_at",
       key: "created_at",
+      render: (_, record) => (
+        <>{dayjs(record.created_at).format("DD-MM-YYYY HH:mm:ss")}</>
+      ),
+      sorter: (a, b) => dayjs(a.created_at) - dayjs(b.created_at),
+      sortDirections: ["descend", "ascend"],
     },
     {
       title: "Date-update",
       dataIndex: "updated_at",
-      key: "created_at",
+      key: "updated_at",
+      render: (_, record) => (
+        <>{dayjs(record.updated_at).format("DD-MM-YYYY HH:mm:ss")}</>
+      ),
+      sorter: (a, b) => dayjs(a.updated_at) - dayjs(b.updated_at),
+      sortDirections: ["descend", "ascend"],
     },
     {
       title: "Action",
@@ -206,6 +223,8 @@ function Users() {
       ),
     },
   ];
+  const now = dayjs().format("DD-MM-YYYY HH:mm:ss");
+  console.log(now);
   return (
     <>
       <Header getTitle={getTitle} />

@@ -24,7 +24,6 @@ function Usercreate() {
         Swal.showValidationMessage(err.response.data.message);
       });
   };
-
   const onFinishFailed = (errorInfo) => {
     console.error("Failed:", errorInfo);
   };
