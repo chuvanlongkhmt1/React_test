@@ -1,17 +1,27 @@
 import React, { useEffect, useState } from "react";
 import Header from "../Header/Header";
-import { Button, Form, Input, Card } from "antd";
+import { Button, Form, Input, Card, Select } from "antd";
 import {} from "@ant-design/icons";
 import axios from "axios";
 import Swal from "sweetalert2";
 window.Swal = Swal;
 function Usercreate() {
+  const [groupuser, setGroupuser] = useState([]);
+  const fetchGroupusers = async () => {
+    const { data } = await axios.get("http://127.0.0.1:3000/groupuser");
+    const groupuser = data;
+    setGroupuser(groupuser);
+  };
+  useEffect(() => {
+    fetchGroupusers();
+  }, []);
   const [form] = Form.useForm();
-  const onFinish = async ({ user }) => {
+  const onFinish = (user) => {
+    console.log(user);
     axios
       .post("http://127.0.0.1:3000/users", user)
       .then(function (response) {
-        console.log(response.data);
+        // console.log(response.data);
         Swal.fire({
           icon: "success",
           title: `Tạo người dùng mới thành công`,
@@ -58,6 +68,56 @@ function Usercreate() {
             >
               <Input />
             </Form.Item>
+            <Form.Item
+              name={["user", "groupuser_id"]}
+              label="Nhóm"
+              rules={[{ required: true }]}
+            >
+              <Select>
+                {groupuser.map((option) => (
+                  <Option key={option.id} value={option.id}>
+                    {option.name}
+                  </Option>
+                ))}
+              </Select>
+            </Form.Item>
+            <Form.Item
+              name={["user", "email"]}
+              label="Email"
+              rules={[{ required: true }]}
+            >
+              <Input />
+            </Form.Item>
+            <Form.Item
+              name={["user", "password"]}
+              label="Password"
+              rules={[{ required: true }]}
+              hasFeedback
+            >
+              <Input />
+            </Form.Item>
+
+            {/* <Form.Item
+              name="confirm"
+              label="Confirm Password"
+              dependencies={["user", "password"]}
+              hasFeedback
+              rules={[
+                { required: true },
+                ({ getFieldValue }) => ({
+                  validator(_, value) {
+                    if (!value || getFieldValue("password") === value) {
+                      return Promise.resolve();
+                    }
+                    return Promise.reject(
+                      new Error("không trùng khớp mật khẩu")
+                    );
+                  },
+                }),
+              ]}
+            >
+              <Input.Password />
+            </Form.Item> */}
             <Form.Item>
               <Button type="primary" htmlType="submit">
                 Thêm mới

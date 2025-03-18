@@ -1,15 +1,15 @@
 import React, { useEffect, useState, useRef } from "react";
 import Header from "../Header/Header";
 import { Space, Button, Flex, Popconfirm, Table, Input } from "antd";
-import { Link } from "react-router-dom";
+import { useParams, Link } from "react-router-dom";
 import Highlighter from "react-highlight-words";
 import { SearchOutlined } from "@ant-design/icons";
 import axios from "axios";
 import Swal from "sweetalert2";
 import dayjs from "dayjs";
-function Users() {
+function GroupView() {
+  let { id } = useParams();
   const [users, setUsers] = useState([]);
-  const [groupuser, setGroupuser] = useState([]);
   const handleDelete = (id) => {
     axios
       .delete("http://localhost:3000/users/" + id)
@@ -32,21 +32,22 @@ function Users() {
   const cancel = (e) => {
     console.log(e);
   };
-  const fetchGroupusers = async () => {
+  const [groupuser, setGroupuser] = useState([]);
+  const fetchUsers = async () => {
+    const { data } = await axios.get("http://localhost:3000/groupuser/" + id);
+    const users = data;
+    setUsers(users);
+  };
+  const fetchGroup = async () => {
     const { data } = await axios.get("http://127.0.0.1:3000/groupuser");
     const groupuser = data;
     setGroupuser(groupuser);
   };
-  const fetchUsers = async () => {
-    const { data } = await axios.get("http://127.0.0.1:3000/users");
-    const users = data;
-    setUsers(users);
-  };
   useEffect(() => {
     fetchUsers();
-    fetchGroupusers();
+    fetchGroup();
   }, []);
-  const title = "Users";
+  const title = " Group Users";
   const getTitle = () => {
     return title;
   };
@@ -172,15 +173,7 @@ function Users() {
       dataIndex: "name",
       key: "name",
       ...getColumnSearchProps("name"),
-      sorter: (a, b) => a.name.localeCompare(b.name),
-      sortDirections: ["descend", "ascend"],
-    },
-    {
-      title: "Email",
-      dataIndex: "email",
-      key: "email",
-      ...getColumnSearchProps("email"),
-      sorter: (a, b) => a.age - b.age,
+      sorter: (a, b) => a.name.length - b.name.length,
       sortDirections: ["descend", "ascend"],
     },
     {
@@ -189,34 +182,6 @@ function Users() {
       key: "age",
       ...getColumnSearchProps("age"),
       sorter: (a, b) => a.age - b.age,
-      sortDirections: ["descend", "ascend"],
-    },
-    {
-      title: "Nhóm",
-      dataIndex: "groupuser_id",
-      key: "groupuser_id",
-      render: (_, record) =>
-        groupuser.map((g) => {
-          return (
-            <>
-              {g.id == record.groupuser_id ? (
-                <p>
-                  <Link
-                    to={{
-                      pathname: "/groupuser/view/" + record.id,
-                    }}
-                  >
-                    {g.name}
-                  </Link>
-                </p>
-              ) : (
-                ""
-              )}
-            </>
-          );
-        }),
-      // ...getColumnSearchProps("nhóm"),
-      sorter: (a, b) => a.groupuser_id - b.groupuser_id,
       sortDirections: ["descend", "ascend"],
     },
     {
@@ -279,7 +244,12 @@ function Users() {
         }}
       >
         <Flex justify="space-between">
-          <h1>Danh sách người dùng</h1>{" "}
+          <h1>
+            Danh sách người dùng{" "}
+            {groupuser.map((g) => {
+              return <>{g.id == id ? <>{g.name}</> : ""}</>;
+            })}
+          </h1>
           <Button>
             <Link to="/users/create">Tạo người dùng</Link>
           </Button>
@@ -293,4 +263,4 @@ function Users() {
     </>
   );
 }
-export default Users;
+export default GroupView;

@@ -1,21 +1,10 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 const { Header, Footer, Content } = Layout;
-import {
-  Button,
-  Cascader,
-  DatePicker,
-  Form,
-  Input,
-  InputNumber,
-  Radio,
-  Select,
-  Switch,
-  TreeSelect,
-  Flex,
-  Layout,
-  Menu,
-} from "antd";
+import axios from "axios";
+import Swal from "sweetalert2";
+window.Swal = Swal;
+import { Button, Form, Input, Switch, Flex, Layout, Menu } from "antd";
 import {
   ChromeOutlined,
   GithubOutlined,
@@ -124,6 +113,21 @@ const Signin = () => {
       label: <Link to="/signup">Sign Up</Link>,
     },
   ];
+  const [form] = Form.useForm();
+  const onFinish = ({ user }) => {
+    axios
+      .post("http://127.0.0.1:3000/signin", user)
+      .then(function (response) {
+        console.log(response.data);
+      })
+      .catch(function (error) {
+        console.log(error);
+        Swal.showValidationMessage(err.response.data.message);
+      });
+  };
+  const onFinishFailed = (errorInfo) => {
+    console.error("Failed:", errorInfo);
+  };
   return (
     <Layout style={layoutStyle}>
       <Header style={headerStyle}>
@@ -146,11 +150,10 @@ const Signin = () => {
           <Flex justify="space-around">
             <div style={{ marginLeft: "8%", maxWidth: "310px" }}>
               <Form
-                initialValues={{
-                  size: componentSize,
-                }}
-                onValuesChange={onFormLayoutChange}
-                size={componentSize}
+                form={form}
+                name="Signin"
+                onFinish={onFinish}
+                onFinishFailed={onFinishFailed}
               >
                 <h1
                   style={{ fontSize: "48px", fontWeight: "700", margin: "0px" }}
@@ -168,15 +171,17 @@ const Signin = () => {
                 >
                   Enter your email and password to sign in
                 </h5>
-                <Form.Item>
-                  <h3>Email</h3>
-                  <Input placeholder="Email" />
+                <Form.Item label="email" name={["user", "email"]}>
+                  <Input />
                 </Form.Item>
-                <Form.Item>
-                  <h3>Password</h3>
-                  <Input placeholder="Password" />
+                <Form.Item
+                  label="password"
+                  name={["user", "password"]}
+                  hasFeedback
+                >
+                  <Input.Password />
                 </Form.Item>
-                <Form.Item valuePropName="checked">
+                {/* <Form.Item valuePropName="checked">
                   <Flex
                     gap="8px"
                     style={{
@@ -188,7 +193,7 @@ const Signin = () => {
                     <Switch />
                     Remember me
                   </Flex>
-                </Form.Item>
+                </Form.Item> */}
                 <Form.Item>
                   <Button
                     style={{
@@ -196,6 +201,7 @@ const Signin = () => {
                       height: "40px",
                     }}
                     type="primary"
+                    htmlType="submit"
                   >
                     Sign In
                   </Button>

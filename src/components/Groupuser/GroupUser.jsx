@@ -1,18 +1,36 @@
 import React, { useEffect, useState, useRef } from "react";
 import Header from "../Header/Header";
 import { Space, Button, Flex, Popconfirm, Table, Input } from "antd";
-import { Link } from "react-router-dom";
-import Highlighter from "react-highlight-words";
 import { SearchOutlined } from "@ant-design/icons";
+import Highlighter from "react-highlight-words";
+import { Link } from "react-router-dom";
 import axios from "axios";
 import Swal from "sweetalert2";
 import dayjs from "dayjs";
-function Users() {
-  const [users, setUsers] = useState([]);
+function GroupUser() {
   const [groupuser, setGroupuser] = useState([]);
+  const [users, setUsers] = useState([]);
+  const fetchGroup = async () => {
+    const { data } = await axios.get("http://127.0.0.1:3000/groupuser");
+    const groupuser = data;
+    setGroupuser(groupuser);
+  };
+  const fetchUsers = async () => {
+    const { data } = await axios.get("http://127.0.0.1:3000/users");
+    const users = data;
+    setUsers(users);
+  };
+  useEffect(() => {
+    fetchGroup();
+    fetchUsers();
+  }, []);
+  const title = " Group Users";
+  const getTitle = () => {
+    return title;
+  };
   const handleDelete = (id) => {
     axios
-      .delete("http://localhost:3000/users/" + id)
+      .delete("http://localhost:3000/groupuser/" + id)
       // .delete(`http://localhost:3000/users/${id}`)
       .then(function (response) {
         console.log(response.data);
@@ -31,24 +49,6 @@ function Users() {
   };
   const cancel = (e) => {
     console.log(e);
-  };
-  const fetchGroupusers = async () => {
-    const { data } = await axios.get("http://127.0.0.1:3000/groupuser");
-    const groupuser = data;
-    setGroupuser(groupuser);
-  };
-  const fetchUsers = async () => {
-    const { data } = await axios.get("http://127.0.0.1:3000/users");
-    const users = data;
-    setUsers(users);
-  };
-  useEffect(() => {
-    fetchUsers();
-    fetchGroupusers();
-  }, []);
-  const title = "Users";
-  const getTitle = () => {
-    return title;
   };
   const [searchText, setSearchText] = useState("");
   const [searchedColumn, setSearchedColumn] = useState("");
@@ -176,50 +176,6 @@ function Users() {
       sortDirections: ["descend", "ascend"],
     },
     {
-      title: "Email",
-      dataIndex: "email",
-      key: "email",
-      ...getColumnSearchProps("email"),
-      sorter: (a, b) => a.age - b.age,
-      sortDirections: ["descend", "ascend"],
-    },
-    {
-      title: "Age",
-      dataIndex: "age",
-      key: "age",
-      ...getColumnSearchProps("age"),
-      sorter: (a, b) => a.age - b.age,
-      sortDirections: ["descend", "ascend"],
-    },
-    {
-      title: "Nhóm",
-      dataIndex: "groupuser_id",
-      key: "groupuser_id",
-      render: (_, record) =>
-        groupuser.map((g) => {
-          return (
-            <>
-              {g.id == record.groupuser_id ? (
-                <p>
-                  <Link
-                    to={{
-                      pathname: "/groupuser/view/" + record.id,
-                    }}
-                  >
-                    {g.name}
-                  </Link>
-                </p>
-              ) : (
-                ""
-              )}
-            </>
-          );
-        }),
-      // ...getColumnSearchProps("nhóm"),
-      sorter: (a, b) => a.groupuser_id - b.groupuser_id,
-      sortDirections: ["descend", "ascend"],
-    },
-    {
       title: "Date-create",
       dataIndex: "created_at",
       key: "created_at",
@@ -246,10 +202,17 @@ function Users() {
         <Space size="middle">
           <Link
             to={{
-              pathname: "/users/edit/" + record.id,
+              pathname: "/groupuser/edit/" + record.id,
             }}
           >
             Update
+          </Link>
+          <Link
+            to={{
+              pathname: "/groupuser/view/" + record.id,
+            }}
+          >
+            View
           </Link>
           <Popconfirm
             title="Delete the task"
@@ -265,6 +228,10 @@ function Users() {
       ),
     },
   ];
+  // const user=
+  const expandedRowRender = () => (
+    <Table columns={expandColumns} dataSource={users} pagination={false} />
+  );
   return (
     <>
       <Header getTitle={getTitle} />
@@ -279,18 +246,18 @@ function Users() {
         }}
       >
         <Flex justify="space-between">
-          <h1>Danh sách người dùng</h1>{" "}
+          <h1>Nhóm người dùng</h1>{" "}
           <Button>
-            <Link to="/users/create">Tạo người dùng</Link>
+            <Link to="/groupuser/create">Tạo nhóm</Link>
           </Button>
         </Flex>
         <Table
           columns={columns}
           rowKey={(record) => record.id}
-          dataSource={users}
+          dataSource={groupuser}
         />
       </div>
     </>
   );
 }
-export default Users;
+export default GroupUser;

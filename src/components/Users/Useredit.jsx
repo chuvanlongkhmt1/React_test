@@ -1,13 +1,22 @@
 import React, { useEffect, useState } from "react";
 import Header from "../Header/Header";
 import { useParams, useLocation } from "react-router-dom";
-import { Button, Form, Input, Card } from "antd";
+import { Button, Form, Input, Card, Select } from "antd";
 import {} from "@ant-design/icons";
 import axios from "axios";
 import Swal from "sweetalert2";
 window.Swal = Swal;
 import moment from "moment";
 function Useredit() {
+  const [groupuser, setGroupuser] = useState([]);
+  const fetchGroupusers = async () => {
+    const { data } = await axios.get("http://127.0.0.1:3000/groupuser");
+    const groupuser = data;
+    setGroupuser(groupuser);
+  };
+  useEffect(() => {
+    fetchGroupusers();
+  }, []);
   let { id } = useParams();
   const title = "Edit";
   const getTitle = () => {
@@ -24,7 +33,7 @@ function Useredit() {
   useEffect(() => {
     fetchUser();
   }, []);
-  const onFinish = async ({ user }) => {
+  const onFinish = async (user) => {
     axios
       .put("http://localhost:3000/users/" + id, user)
       .then(function (response) {
@@ -105,6 +114,59 @@ function Useredit() {
             >
               <Input />
             </Form.Item>
+            <Form.Item
+              // name={"age"}
+              name={["user", "groupuser_id"]}
+              label="Nhóm"
+
+              // initialValue={user.age}
+              // rules={[{ required: true }]}
+            >
+              <Select>
+                {groupuser.map((option) => (
+                  <Option key={option.id} value={option.id}>
+                    {option.name}
+                  </Option>
+                ))}
+              </Select>
+            </Form.Item>
+            <Form.Item
+              name={["user", "email"]}
+              label="Email"
+              rules={[{ required: true }]}
+            >
+              <Input />
+            </Form.Item>
+            <Form.Item
+              name={["user", "password"]}
+              label="Password"
+              rules={[{ required: true }]}
+              hasFeedback
+            >
+              <Input.Password />
+            </Form.Item>
+
+            {/* <Form.Item
+              name="confirm"
+              label="Confirm Password"
+              dependencies={["user", "password"]}
+              hasFeedback
+              rules={[
+                { required: true },
+                ({ getFieldValue }) => ({
+                  validator(_, value) {
+                    if (!value || getFieldValue("password") === value) {
+                      return Promise.resolve();
+                    }
+                    return Promise.reject(
+                      new Error("không trùng khớp mật khẩu")
+                    );
+                  },
+                }),
+              ]}
+            >
+              <Input.Password />
+            </Form.Item> */}
             <Form.Item>
               <Button type="primary" htmlType="submit">
                 Cập nhật
