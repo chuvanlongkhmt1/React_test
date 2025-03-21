@@ -1,6 +1,11 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import { Link } from "react-router-dom";
+import { useNavigate } from "react-router";
+import axios from "axios";
+import Swal from "sweetalert2";
+window.Swal = Swal;
 const { Header, Footer, Content } = Layout;
+import { UserContext } from "../../contexts/UserContext";
 import {
   Button,
   Cascader,
@@ -62,9 +67,6 @@ const Signup = () => {
     padding: "11px",
   };
   const [componentSize, setComponentSize] = useState("default");
-  const onFormLayoutChange = ({ size }) => {
-    setComponentSize(size);
-  };
   const items = [
     {
       label: "Creative Tim",
@@ -125,8 +127,29 @@ const Signup = () => {
       label: <Link to="/signin">Sign In</Link>,
     },
   ];
-  const onChange = (e) => {
-    console.log(`checked = ${e.target.checked}`);
+  let navigate = useNavigate();
+  const { user, setUser } = useContext(UserContext);
+  const [form] = Form.useForm();
+  const onFinish = async (user) => {
+    axios
+      .post("http://127.0.0.1:3000/create", user)
+      .then(function (response) {
+        localStorage.setItem("user", JSON.stringify(response.data.user));
+        console.log(response.data.error);
+        setUser(response.data.user);
+        navigate("/");
+      })
+      .catch(function (err) {
+        Swal.fire({
+          icon: "error",
+          title: err.response.data.error,
+          showConfirmButton: true,
+          // timer: 5000,
+        });
+      });
+  };
+  const onFinishFailed = (errorInfo) => {
+    console.error("Failed:", errorInfo);
   };
   return (
     <Layout style={layoutStyle}>
@@ -197,10 +220,10 @@ const Signup = () => {
                 </h3>
               </div>
               <Form
-                initialValues={{
-                  size: componentSize,
-                }}
-                onValuesChange={onFormLayoutChange}
+                form={form}
+                name="Signup"
+                onFinish={onFinish}
+                onFinishFailed={onFinishFailed}
                 size={componentSize}
                 style={{
                   padding: "16px",
@@ -242,16 +265,77 @@ const Signup = () => {
                 >
                   Or
                 </h6>
-                <Form.Item>
-                  <Input placeholder="Name" />
+                <Form.Item
+                  name={"name"}
+                  rules={[
+                    { required: true, message: "Please type your name!" },
+                  ]}
+                >
+                  <Input placeholder="name" />
                 </Form.Item>
-                <Form.Item>
-                  <Input placeholder="Email" />
+                <Form.Item
+                  name={"email"}
+                  rules={[
+                    {
+                      required: true,
+                      message: "Please type your email!",
+                    },
+                    {
+                      type: "email",
+                      message: "The input is not valid E-mail!",
+                    },
+                  ]}
+                >
+                  <Input placeholder="email" />
                 </Form.Item>
-                <Form.Item>
-                  <Input placeholder="Password" />
+                <Form.Item
+                  name={"password"}
+                  rules={[
+                    { required: true, message: "Please type your password!" },
+                  ]}
+                  hasFeedback
+                >
+                  <Input.Password placeholder="password" />
                 </Form.Item>
-                <Form.Item valuePropName="checked">
+                <Form.Item
+                  name="confirm"
+                  dependencies={["password"]}
+                  hasFeedback
+                  rules={[
+                    {
+                      required: true,
+                      message: "Please confirm your password!",
+                    },
+                    ({ getFieldValue }) => ({
+                      validator(_, value) {
+                        if (!value || getFieldValue("password") === value) {
+                          return Promise.resolve();
+                        }
+                        return Promise.reject(
+                          new Error(
+                            "The new password that you entered do not match!"
+                          )
+                        );
+                      },
+                    }),
+                  ]}
+                >
+                  <Input.Password placeholder="Confirm Password" />
+                </Form.Item>
+                <Form.Item
+                  name="agreement"
+                  valuePropName="checked"
+                  rules={[
+                    {
+                      validator: (_, value) =>
+                        value
+                          ? Promise.resolve()
+                          : Promise.reject(
+                              new Error("Should accept agreement")
+                            ),
+                    },
+                  ]}
+                >
                   <Flex
                     gap="8px"
                     style={{
@@ -260,10 +344,9 @@ const Signup = () => {
                       fontSize: "15px",
                     }}
                   >
-                    <Checkbox onChange={onChange} />I agree the
-                    <a href="javascrip:;">
-                      <h4 style={{ margin: "0px" }}>Terms and Conditions</h4>
-                    </a>
+                    <Checkbox>
+                      I have read the <a href="">agreement</a>
+                    </Checkbox>
                   </Flex>
                 </Form.Item>
                 <Form.Item>
@@ -273,6 +356,7 @@ const Signup = () => {
                       height: "40px",
                     }}
                     type="primary"
+                    htmlType="submit"
                   >
                     Sign Up
                   </Button>

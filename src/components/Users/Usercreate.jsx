@@ -17,7 +17,6 @@ function Usercreate() {
   }, []);
   const [form] = Form.useForm();
   const onFinish = (user) => {
-    console.log(user);
     axios
       .post("http://127.0.0.1:3000/users", user)
       .then(function (response) {

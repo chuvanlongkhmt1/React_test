@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import Header from "../Header/Header";
 const { Dragger } = Upload;
 import {
@@ -26,7 +26,9 @@ import {
   TwitterOutlined,
   UploadOutlined,
 } from "@ant-design/icons";
+import { UserContext } from "../../contexts/UserContext";
 function Profile() {
+  const { user, setUser } = useContext(UserContext);
   const title = "Profile";
   const getTitle = () => {
     return title;
@@ -182,7 +184,7 @@ function Profile() {
                 />
                 <div>
                   <h2 style={{ margin: "0px", fontWeight: "400px" }}>
-                    Sarah Jacob
+                    {user.name}
                   </h2>
                   <p
                     style={{

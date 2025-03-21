@@ -1,10 +1,13 @@
-import React, { useState } from "react";
+import React, { useContext } from "react";
 import { Link } from "react-router-dom";
+import { useNavigate } from "react-router";
 const { Header, Footer, Content } = Layout;
 import axios from "axios";
 import Swal from "sweetalert2";
 window.Swal = Swal;
 import { Button, Form, Input, Switch, Flex, Layout, Menu } from "antd";
+import { UserContext } from "../../contexts/UserContext";
+
 import {
   ChromeOutlined,
   GithubOutlined,
@@ -16,7 +19,7 @@ import {
   LoginOutlined,
   LogoutOutlined,
 } from "@ant-design/icons";
-const Signin = () => {
+function Signin() {
   const headerStyle = {
     textAlign: "center",
     color: "#141414",
@@ -43,10 +46,6 @@ const Signin = () => {
     width: "100%",
     maxWidth: "100%",
     backgroundColor: "#fff",
-  };
-  const [componentSize, setComponentSize] = useState("default");
-  const onFormLayoutChange = ({ size }) => {
-    setComponentSize(size);
   };
   const items = [
     {
@@ -113,21 +112,42 @@ const Signin = () => {
       label: <Link to="/signup">Sign Up</Link>,
     },
   ];
+  let navigate = useNavigate();
+  const { user, setUser } = useContext(UserContext);
   const [form] = Form.useForm();
-  const onFinish = ({ user }) => {
+  const onFinish = async ({ user }) => {
     axios
       .post("http://127.0.0.1:3000/signin", user)
       .then(function (response) {
-        console.log(response.data);
+        if (response.data.logged_in === true) {
+          localStorage.setItem("user", JSON.stringify(response.data.user));
+          setUser(response.data.user);
+          Swal.fire({
+            icon: "success",
+            title: response.data.success,
+            showConfirmButton: false,
+            timer: 500,
+          });
+          navigate("/");
+        } else {
+          Swal.fire({
+            icon: "error",
+            title: response.data.error,
+            showConfirmButton: false,
+            timer: 1500,
+          });
+          console.log(response.data.error);
+        }
       })
       .catch(function (error) {
         console.log(error);
-        Swal.showValidationMessage(err.response.data.message);
+        Swal.showValidationMessage(error);
       });
   };
   const onFinishFailed = (errorInfo) => {
     console.error("Failed:", errorInfo);
   };
+
   return (
     <Layout style={layoutStyle}>
       <Header style={headerStyle}>
@@ -171,12 +191,17 @@ const Signin = () => {
                 >
                   Enter your email and password to sign in
                 </h5>
-                <Form.Item label="email" name={["user", "email"]}>
+                <Form.Item
+                  label="email"
+                  name={["user", "email"]}
+                  rules={[{ required: true }]}
+                >
                   <Input />
                 </Form.Item>
                 <Form.Item
                   label="password"
                   name={["user", "password"]}
+                  rules={[{ required: true }]}
                   hasFeedback
                 >
                   <Input.Password />
@@ -217,9 +242,7 @@ const Signin = () => {
                     Don't have an account?
                   </h3>
                   <Link to="/signup">
-                    <a href="javascrip:;">
-                      <h3 style={{ margin: "0px" }}>Sign Up</h3>
-                    </a>
+                    <h3 style={{ margin: "0px" }}>Sign Up</h3>
                   </Link>
                 </Flex>
               </Form>
@@ -277,5 +300,5 @@ const Signin = () => {
       </Footer>
     </Layout>
   );
-};
+}
 export default Signin;

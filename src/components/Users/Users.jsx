@@ -203,7 +203,7 @@ function Users() {
                 <p>
                   <Link
                     to={{
-                      pathname: "/groupuser/view/" + record.id,
+                      pathname: "/groupuser/view/" + record.groupuser_id,
                     }}
                   >
                     {g.name}
@@ -259,7 +259,7 @@ function Users() {
             okText="Yes"
             cancelText="No"
           >
-            <a href="#">Delete</a>
+            <a href="javascript:;">Delete</a>
           </Popconfirm>
         </Space>
       ),

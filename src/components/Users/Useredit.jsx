@@ -130,19 +130,10 @@ function Useredit() {
                 ))}
               </Select>
             </Form.Item>
-            <Form.Item
-              name={["user", "email"]}
-              label="Email"
-              rules={[{ required: true }]}
-            >
+            <Form.Item name={["user", "email"]} label="Email">
               <Input />
             </Form.Item>
-            <Form.Item
-              name={["user", "password"]}
-              label="Password"
-              rules={[{ required: true }]}
-              hasFeedback
-            >
+            <Form.Item name={["user", "password"]} label="Password" hasFeedback>
               <Input.Password />
             </Form.Item>
 

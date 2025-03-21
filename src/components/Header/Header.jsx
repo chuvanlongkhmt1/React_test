@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import { SearchOutlined } from "@ant-design/icons";
 import { Link } from "react-router-dom";
 import {
@@ -25,9 +25,10 @@ import {
   StarOutlined,
   HistoryOutlined,
 } from "@ant-design/icons";
-
+import { UserContext } from "../../contexts/UserContext";
 function Header(props) {
   const [open, setOpen] = useState(false);
+  const { user, setUser } = useContext(UserContext);
   const showDrawer = () => {
     setOpen(true);
   };
@@ -64,7 +65,6 @@ function Header(props) {
     zIndex: "1",
   };
 
-  const isLoggedIn = false;
   return (
     <>
       <FloatButton icon={<SettingOutlined spin />} onClick={showDrawer} />
@@ -84,7 +84,7 @@ function Header(props) {
             >
               type here
             </Button>
-            <Link to="/signin">
+            {/* <Link to="/signin">
               <Avatar
                 style={{
                   backgroundColor: "black",
@@ -95,6 +95,18 @@ function Header(props) {
                 icon={<UserOutlined />}
               />
               <span>Sign In</span>
+            </Link> */}
+            <Link to="/profile">
+              <Avatar
+                style={{
+                  backgroundColor: "black",
+                  color: "white",
+                  marginRight: "5px",
+                }}
+                size={20}
+                icon={<UserOutlined />}
+              />
+              <span>{user?.name}</span>
             </Link>
             <Button type="text" onClick={showDrawer}>
               <Avatar

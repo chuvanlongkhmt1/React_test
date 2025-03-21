@@ -29,85 +29,92 @@ const {
   pos,
   menuStyle,
 } = styles;
-const items = [
-  {
-    key: "1",
-    label: (
-      <div>
-        <a className={textdask} href="">
-          <div className={brand}>
-            <img className={iconimg} src={imgicon} alt="" />
-            <p>Muse Dashboard</p>
-          </div>
-        </a>
-        <hr />
-      </div>
-    ),
-    icon: <MenuFoldOutlined />,
-    type: "group",
-    children: [
-      {
-        key: "/",
-        icon: <FundOutlined />,
-        label: <Link to="/">Dashboard</Link>,
-      },
-      {
-        key: "/table",
-        icon: <TableOutlined />,
-        label: <Link to="/table">Table</Link>,
-      },
-      {
-        key: "/billing",
-        icon: <CreditCardOutlined />,
-        label: <Link to="/billing">Billing</Link>,
-      },
-      {
-        key: "/listmus",
-        icon: <CreditCardOutlined />,
-        label: <Link to="/listmus">Listmus</Link>,
-      },
-      {
-        key: "/groupuser",
-        icon: <CreditCardOutlined />,
-        label: <Link to="/groupuser">Group Users</Link>,
-      },
-      {
-        key: "/users",
-        icon: <CreditCardOutlined />,
-        label: <Link to="/users">Users</Link>,
-      },
-      {
-        key: "/rtl",
-        icon: <CaretLeftOutlined />,
-        label: "RTL",
-      },
-    ],
-  },
-  {
-    key: "6",
-    label: "Account Pages",
-    type: "group",
-    children: [
-      {
-        key: "/profile",
-        icon: <UserOutlined />,
-        label: <Link to="/profile">Profile</Link>,
-      },
-      {
-        key: "signin",
-        icon: <LoginOutlined />,
-        label: <Link to="/signin">Sign In</Link>,
-      },
-      {
-        key: "signup",
-        icon: <LogoutOutlined />,
-        label: <Link to="/signup">Sign Up</Link>,
-      },
-    ],
-  },
-];
-
 function Slidebar() {
+  const deletelocal = () => {
+    localStorage.removeItem("user");
+  };
+  const items = [
+    {
+      key: "1",
+      label: (
+        <div>
+          <a className={textdask} href="">
+            <div className={brand}>
+              <img className={iconimg} src={imgicon} alt="" />
+              <p>Muse Dashboard</p>
+            </div>
+          </a>
+          <hr />
+        </div>
+      ),
+      icon: <MenuFoldOutlined />,
+      type: "group",
+      children: [
+        {
+          key: "/",
+          icon: <FundOutlined />,
+          label: <Link to="/">Dashboard</Link>,
+        },
+        {
+          key: "/table",
+          icon: <TableOutlined />,
+          label: <Link to="/table">Table</Link>,
+        },
+        {
+          key: "/billing",
+          icon: <CreditCardOutlined />,
+          label: <Link to="/billing">Billing</Link>,
+        },
+        {
+          key: "/listmus",
+          icon: <CreditCardOutlined />,
+          label: <Link to="/listmus">Listmus</Link>,
+        },
+        {
+          key: "/groupuser",
+          icon: <CreditCardOutlined />,
+          label: <Link to="/groupuser">Group Users</Link>,
+        },
+        {
+          key: "/users",
+          icon: <CreditCardOutlined />,
+          label: <Link to="/users">Users</Link>,
+        },
+        {
+          key: "/rtl",
+          icon: <CaretLeftOutlined />,
+          label: "RTL",
+        },
+      ],
+    },
+    {
+      key: "6",
+      label: "Account Pages",
+      type: "group",
+      children: [
+        {
+          key: "/profile",
+          icon: <UserOutlined />,
+          label: <Link to="/profile">Profile</Link>,
+        },
+        // {
+        //   key: "signin",
+        //   icon: <LoginOutlined />,
+        //   label: <Link to="/signin">Sign In</Link>,
+        // },
+        {
+          key: "Logout",
+          icon: <LogoutOutlined />,
+          label: (
+            <Link to="/signin" onClick={deletelocal}>
+              Log out
+            </Link>
+          ),
+        },
+      ],
+    },
+  ];
+
   const onClick = (e) => {
     console.log("click ", e);
   };
