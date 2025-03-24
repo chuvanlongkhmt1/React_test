@@ -33,7 +33,7 @@ function Users() {
     console.log(e);
   };
   const fetchGroupusers = async () => {
-    const { data } = await axios.get("http://127.0.0.1:3000/groupuser");
+    const { data } = await axios.get("http://127.0.0.1:3000/group_user");
     const groupuser = data;
     setGroupuser(groupuser);
   };
@@ -193,17 +193,17 @@ function Users() {
     },
     {
       title: "Nhóm",
-      dataIndex: "groupuser_id",
-      key: "groupuser_id",
+      dataIndex: "group_user_id",
+      key: "group_user_id",
       render: (_, record) =>
         groupuser.map((g) => {
           return (
             <>
-              {g.id == record.groupuser_id ? (
+              {g.id == record.group_user_id ? (
                 <p>
                   <Link
                     to={{
-                      pathname: "/groupuser/view/" + record.groupuser_id,
+                      pathname: "/groupuser/view/" + record.group_user_id,
                     }}
                   >
                     {g.name}
@@ -216,7 +216,7 @@ function Users() {
           );
         }),
       // ...getColumnSearchProps("nhóm"),
-      sorter: (a, b) => a.groupuser_id - b.groupuser_id,
+      sorter: (a, b) => a.group_user_id - b.group_user_id,
       sortDirections: ["descend", "ascend"],
     },
     {

@@ -10,7 +10,7 @@ import moment from "moment";
 function Useredit() {
   const [groupuser, setGroupuser] = useState([]);
   const fetchGroupusers = async () => {
-    const { data } = await axios.get("http://127.0.0.1:3000/groupuser");
+    const { data } = await axios.get("http://127.0.0.1:3000/group_user");
     const groupuser = data;
     setGroupuser(groupuser);
   };
@@ -27,8 +27,8 @@ function Useredit() {
   const fetchUser = async () => {
     const { data } = await axios.get("http://127.0.0.1:3000/users/" + id);
     setUser(data);
-    // form.setFieldsValue(data);
-    form.setFieldsValue({ user: data });
+    form.setFieldsValue(data);
+    // form.setFieldsValue({ user: data });
   };
   useEffect(() => {
     fetchUser();
@@ -98,7 +98,7 @@ function Useredit() {
           >
             <Form.Item
               // name={"name"}
-              name={["user", "name"]}
+              name={"name"}
               label="Name"
               // initialValue={user.name}
               // rules={[{ required: true }]}
@@ -107,7 +107,7 @@ function Useredit() {
             </Form.Item>
             <Form.Item
               // name={"age"}
-              name={["user", "age"]}
+              name={"age"}
               label="Age"
               // initialValue={user.age}
               // rules={[{ required: true }]}
@@ -115,8 +115,7 @@ function Useredit() {
               <Input />
             </Form.Item>
             <Form.Item
-              // name={"age"}
-              name={["user", "groupuser_id"]}
+              name={"group_user_id"}
               label="Nhóm"
 
               // initialValue={user.age}
@@ -130,10 +129,10 @@ function Useredit() {
                 ))}
               </Select>
             </Form.Item>
-            <Form.Item name={["user", "email"]} label="Email">
+            <Form.Item name={ "email"} label="Email">
               <Input />
             </Form.Item>
-            <Form.Item name={["user", "password"]} label="Password" hasFeedback>
+            <Form.Item name={"password"} label="Password" hasFeedback>
               <Input.Password />
             </Form.Item>
 

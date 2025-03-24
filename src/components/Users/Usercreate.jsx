@@ -1,14 +1,14 @@
 import React, { useEffect, useState } from "react";
 import Header from "../Header/Header";
-import { Button, Form, Input, Card, Select } from "antd";
-import {} from "@ant-design/icons";
+import { Button, Form, Input, Card, Select,Upload } from "antd";
+import {PlusOutlined } from "@ant-design/icons";
 import axios from "axios";
 import Swal from "sweetalert2";
 window.Swal = Swal;
 function Usercreate() {
   const [groupuser, setGroupuser] = useState([]);
   const fetchGroupusers = async () => {
-    const { data } = await axios.get("http://127.0.0.1:3000/groupuser");
+    const { data } = await axios.get("http://127.0.0.1:3000/group_user");
     const groupuser = data;
     setGroupuser(groupuser);
   };
@@ -16,7 +16,7 @@ function Usercreate() {
     fetchGroupusers();
   }, []);
   const [form] = Form.useForm();
-  const onFinish = (user) => {
+  const onFinish = async (user) => {
     axios
       .post("http://127.0.0.1:3000/users", user)
       .then(function (response) {
@@ -28,9 +28,13 @@ function Usercreate() {
           timer: 1500,
         });
       })
-      .catch(function (error) {
-        console.log(error);
-        Swal.showValidationMessage(err.response.data.message);
+      .catch(function (err) {
+        Swal.fire({
+          icon: "error",
+          title: err.response.data.error,
+          showConfirmButton: false,
+          timer: 5000,
+        });
       });
   };
   const onFinishFailed = (errorInfo) => {
@@ -51,24 +55,24 @@ function Usercreate() {
             name="Usercreate"
             onFinish={onFinish}
             onFinishFailed={onFinishFailed}
-            // validateMessages={validateMessages}
+          // validateMessages={validateMessages}
           >
             <Form.Item
-              name={["user", "name"]}
+              name={"name"}
               label="Name"
               rules={[{ required: true }]}
             >
               <Input />
             </Form.Item>
             <Form.Item
-              name={["user", "age"]}
+              name={"age"}
               label="Age"
               rules={[{ required: true }]}
             >
               <Input />
             </Form.Item>
             <Form.Item
-              name={["user", "groupuser_id"]}
+              name={"group_user_id"}
               label="Nhóm"
               rules={[{ required: true }]}
             >
@@ -81,42 +85,67 @@ function Usercreate() {
               </Select>
             </Form.Item>
             <Form.Item
-              name={["user", "email"]}
+              name={"email"}
               label="Email"
               rules={[{ required: true }]}
             >
               <Input />
             </Form.Item>
             <Form.Item
-              name={["user", "password"]}
+              name={"password"}
               label="Password"
               rules={[{ required: true }]}
-              hasFeedback
             >
-              <Input />
+              <Input.Password />
             </Form.Item>
 
-            {/* <Form.Item
+            <Form.Item
               name="confirm"
-              label="Confirm Password"
-              dependencies={["user", "password"]}
-              hasFeedback
+              label="Password confirm"
+              dependencies={["password"]}
               rules={[
-                { required: true },
+                {
+                  required: true,
+                  message: "Please confirm your password!",
+                },
                 ({ getFieldValue }) => ({
                   validator(_, value) {
                     if (!value || getFieldValue("password") === value) {
                       return Promise.resolve();
                     }
                     return Promise.reject(
-                      new Error("không trùng khớp mật khẩu")
+                      new Error(
+                        "The new password that you entered do not match!"
+                      )
                     );
                   },
                 }),
               ]}
             >
               <Input.Password />
-            </Form.Item> */}
+            </Form.Item>
+            <Form.Item label="Upload" name="file">
+              <Upload listType="picture-card">
+                <button
+                  style={{
+                    color: 'inherit',
+                    cursor: 'inherit',
+                    border: 0,
+                    background: 'none',
+                  }}
+                  type="button"
+                >
+                  <PlusOutlined />
+                  <div
+                    style={{
+                      marginTop: 8,
+                    }}
+                  >
+                    Upload
+                  </div>
+                </button>
+              </Upload>
+            </Form.Item>
             <Form.Item>
               <Button type="primary" htmlType="submit">
                 Thêm mới

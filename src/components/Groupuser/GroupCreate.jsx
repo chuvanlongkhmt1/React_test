@@ -9,7 +9,7 @@ function Groupcreate() {
   const [form] = Form.useForm();
   const onFinish = async ({ group }) => {
     axios
-      .post("http://127.0.0.1:3000/groupuser", group)
+      .post("http://127.0.0.1:3000/group_user", group)
       .then(function (response) {
         console.log(response.data);
         Swal.fire({

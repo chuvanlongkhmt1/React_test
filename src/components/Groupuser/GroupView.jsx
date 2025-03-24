@@ -34,12 +34,12 @@ function GroupView() {
   };
   const [groupuser, setGroupuser] = useState([]);
   const fetchUsers = async () => {
-    const { data } = await axios.get("http://localhost:3000/groupuser/" + id);
+    const { data } = await axios.get("http://localhost:3000/group_user/" + id);
     const users = data;
     setUsers(users);
   };
   const fetchGroup = async () => {
-    const { data } = await axios.get("http://127.0.0.1:3000/groupuser");
+    const { data } = await axios.get("http://127.0.0.1:3000/group_user");
     const groupuser = data;
     setGroupuser(groupuser);
   };

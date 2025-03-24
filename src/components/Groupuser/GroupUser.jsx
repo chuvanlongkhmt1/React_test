@@ -11,7 +11,7 @@ function GroupUser() {
   const [groupuser, setGroupuser] = useState([]);
   const [users, setUsers] = useState([]);
   const fetchGroup = async () => {
-    const { data } = await axios.get("http://127.0.0.1:3000/groupuser");
+    const { data } = await axios.get("http://127.0.0.1:3000/group_user");
     const groupuser = data;
     setGroupuser(groupuser);
   };
@@ -30,7 +30,7 @@ function GroupUser() {
   };
   const handleDelete = (id) => {
     axios
-      .delete("http://localhost:3000/groupuser/" + id)
+      .delete("http://localhost:3000/group_user/" + id)
       // .delete(`http://localhost:3000/users/${id}`)
       .then(function (response) {
         console.log(response.data);
