@@ -11,6 +11,7 @@ function Usercreate() {
   // const handlefilechange =({file}) =>{
   //   setFile(file)
   // }
+  
   const avatar = e => {
     if (Array.isArray(e)) {
       return e;
