@@ -7,18 +7,16 @@ import { SearchOutlined } from "@ant-design/icons";
 import axios from "axios";
 import Swal from "sweetalert2";
 import dayjs from "dayjs";
-function Users() {
-  const [users, setUsers] = useState([]);
-  const [groupuser, setGroupuser] = useState([]);
+function Test() {
+  const [posts, setPosts] = useState([]);
   const handleDelete = (id) => {
     axios
-      .delete("http://localhost:3000/users/" + id)
-      // .delete(`http://localhost:3000/users/${id}`)
+      .delete("http://localhost:3000/posts/" + id)
       .then(function (response) {
         console.log(response.data);
         Swal.fire({
           icon: "success",
-          title: `Đã xóa người dùng`,
+          title: `Đã xóa`,
           showConfirmButton: true,
           preConfirm: function () {
             return window.location.reload();
@@ -32,21 +30,16 @@ function Users() {
   const cancel = (e) => {
     console.log(e);
   };
-  const fetchGroupusers = async () => {
-    const { data } = await axios.get("http://127.0.0.1:3000/group_user");
-    const groupuser = data;
-    setGroupuser(groupuser);
-  };
+
   const fetchUsers = async () => {
-    const { data } = await axios.get("http://127.0.0.1:3000/users");
-    const users = data;
-    setUsers(users);
+    const { data } = await axios.get("http://127.0.0.1:3000/posts");
+    const posts = data;
+    setPosts(posts);
   };
   useEffect(() => {
     fetchUsers();
-    fetchGroupusers();
   }, []);
-  const title = "Users";
+  const title = "Posts";
   const getTitle = () => {
     return title;
   };
@@ -168,61 +161,25 @@ function Users() {
   });
   const columns = [
     {
-      title: "Avatar",
-      dataIndex: "avatar_url",
-      key: "avatar_url",
-      render:(url) => (url? <Avatar src={url}/> :"no images")
+      title: "Images",
+      dataIndex: "images",
+      key: "images",
+      // render:(_, record) => (url? <Avatar src={record.url}/> :"no images")
     },
     {
-      title: "Name",
-      dataIndex: "name",
-      key: "name",
-      ...getColumnSearchProps("name"),
+      title: "Title",
+      dataIndex: "title",
+      key: "title",
+      ...getColumnSearchProps("title"),
       sorter: (a, b) => a.name.localeCompare(b.name),
       sortDirections: ["descend", "ascend"],
     },
     {
-      title: "Email",
-      dataIndex: "email",
-      key: "email",
-      ...getColumnSearchProps("email"),
+      title: "description",
+      dataIndex: "description",
+      key: "description",
+      ...getColumnSearchProps("description"),
       sorter: (a, b) => a.age - b.age,
-      sortDirections: ["descend", "ascend"],
-    },
-    {
-      title: "Age",
-      dataIndex: "age",
-      key: "age",
-      ...getColumnSearchProps("age"),
-      sorter: (a, b) => a.age - b.age,
-      sortDirections: ["descend", "ascend"],
-    },
-    {
-      title: "Nhóm",
-      dataIndex: "group_user_id",
-      key: "group_user_id",
-      render: (_, record) =>
-        groupuser.map((g) => {
-          return (
-            <>
-              {g.id == record.group_user_id ? (
-                <p>
-                  <Link
-                    to={{
-                      pathname: "/groupuser/view/" + record.group_user_id,
-                    }}
-                  >
-                    {g.name}
-                  </Link>
-                </p>
-              ) : (
-                ""
-              )}
-            </>
-          );
-        }),
-      // ...getColumnSearchProps("nhóm"),
-      sorter: (a, b) => a.group_user_id - b.group_user_id,
       sortDirections: ["descend", "ascend"],
     },
     {
@@ -250,13 +207,13 @@ function Users() {
       key: "action",
       render: (_, record) => (
         <Space size="middle">
-          <Link
+          {/* <Link
             to={{
               pathname: "/users/edit/" + record.id,
             }}
           >
             Update
-          </Link>
+          </Link> */}
           <Popconfirm
             title="Delete the task"
             description="Are you sure to delete this task?"
@@ -285,18 +242,18 @@ function Users() {
         }}
       >
         <Flex justify="space-between">
-          <h1>Danh sách người dùng</h1>{" "}
+          <h1>Danh sách post</h1>{" "}
           <Button>
-            <Link to="/users/create">Tạo người dùng</Link>
+            <Link to="/test/create">Tạo Post</Link>
           </Button>
         </Flex>
         <Table
           columns={columns}
           rowKey={(record) => record.id}
-          dataSource={users}
+          dataSource={posts}
         />
       </div>
     </>
   );
 }
-export default Users;
+export default Test;

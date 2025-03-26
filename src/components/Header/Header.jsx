@@ -104,7 +104,7 @@ function Header(props) {
                   marginRight: "5px",
                 }}
                 size={20}
-                icon={<UserOutlined />}
+                src={user.avatar_url}
               />
               <span>{user?.name}</span>
             </Link>

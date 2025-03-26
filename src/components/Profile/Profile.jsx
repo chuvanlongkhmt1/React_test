@@ -180,7 +180,7 @@ function Profile() {
                 <Avatar
                   shape="square"
                   size={72}
-                  src={`https://demos.creative-tim.com/muse-ant-design-dashboard/static/media/face-3.e08fd425.jpg`}
+                  src={user.avatar_url}
                 />
                 <div>
                   <h2 style={{ margin: "0px", fontWeight: "400px" }}>

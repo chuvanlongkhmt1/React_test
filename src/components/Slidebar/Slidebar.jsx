@@ -81,9 +81,9 @@ function Slidebar() {
           label: <Link to="/users">Users</Link>,
         },
         {
-          key: "/rtl",
+          key: "/test",
           icon: <CaretLeftOutlined />,
-          label: "RTL",
+          label: <Link to="/test">Test</Link>,
         },
       ],
     },

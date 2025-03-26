@@ -3,6 +3,8 @@ import Home from "./components/Home/Home";
 import Signin from "./components/Signin/Signin";
 import Signup from "./components/Signup/Signup";
 import Table from "./components/Table/Table";
+import Test from "./components/Test/Test";
+import TestCreate from "./components/Test/TestCreate";
 import Billing from "./components/Billing/Billing";
 import Listmus from "./components/Listmus/Listmus";
 import GroupUser from "./components/Groupuser/GroupUser.jsx";
@@ -42,6 +44,8 @@ function App() {
             <Route path="users" element={<Users />} />
             <Route path="users/create/" element={<Usercreate />} />
             <Route path="users/edit/:id" element={<Useredit />} />
+            <Route path="test" element={<Test />} />
+            <Route path="test/create/" element={<TestCreate />} />
           </Route>
           {/* )} */}
         </Routes>

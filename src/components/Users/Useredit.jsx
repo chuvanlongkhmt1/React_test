@@ -1,13 +1,17 @@
 import React, { useEffect, useState } from "react";
 import Header from "../Header/Header";
 import { useParams, useLocation } from "react-router-dom";
-import { Button, Form, Input, Card, Select } from "antd";
+import { Button, Form, Input, Card, Select, Upload } from "antd";
 import {} from "@ant-design/icons";
 import axios from "axios";
 import Swal from "sweetalert2";
 window.Swal = Swal;
 import moment from "moment";
 function Useredit() {
+  const [file,setFile]=useState(null)
+  const handlefilechange =({file}) =>{
+    setFile(file)
+  }
   const [groupuser, setGroupuser] = useState([]);
   const fetchGroupusers = async () => {
     const { data } = await axios.get("http://127.0.0.1:3000/group_user");
@@ -33,9 +37,12 @@ function Useredit() {
   useEffect(() => {
     fetchUser();
   }, []);
-  const onFinish = async (user) => {
+  const onFinish =  (value) => {
+    const formData = new FormData();
+    Object.keys(value).forEach((key)=>formData.append(key, value[key]));
+    if(file) formData.append("avatar", file);
     axios
-      .put("http://localhost:3000/users/" + id, user)
+      .put("http://localhost:3000/users/" + id, formData)
       .then(function (response) {
         console.log(response.data);
         Swal.fire({
@@ -60,35 +67,6 @@ function Useredit() {
       <Header getTitle={getTitle}></Header>
       <div style={{ padding: "20px 40px" }}>
         <Card title="Sửa thông tin người dùng" style={{ padding: "20px 40px" }}>
-          {/* <Form>
-            <h3>Cập nhật thông tin</h3>
-            <Form.Item>
-              <Input
-                value={name}
-                placeholder="Name"
-                onChange={(e) => setName(e.target.value)}
-              />
-            </Form.Item>
-            <Form.Item>
-              <Input
-                value={age}
-                placeholder="Age"
-                onChange={(e) => setAge(e.target.value)}
-              />
-            </Form.Item>
-            <Form.Item>
-              <Button
-                style={{
-                  width: "100%",
-                  height: "40px",
-                }}
-                type="primary"
-                onClick={handleUpdate}
-              >
-                Cập nhật
-              </Button>
-            </Form.Item>
-          </Form> */}
           <Form
             form={form}
             name="Useredit"
@@ -157,6 +135,12 @@ function Useredit() {
             >
               <Input.Password />
             </Form.Item> */}
+            <Form.Item label="Upload">
+              <Upload
+                beforeUpload={()=>false} onChange={handlefilechange}>
+              <Button>Chose images</Button>
+              </Upload>
+            </Form.Item>
             <Form.Item>
               <Button type="primary" htmlType="submit">
                 Cập nhật
