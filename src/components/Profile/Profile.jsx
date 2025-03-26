@@ -180,11 +180,11 @@ function Profile() {
                 <Avatar
                   shape="square"
                   size={72}
-                  src={user.avatar_url}
+                  src={user?.avatar_url}
                 />
                 <div>
                   <h2 style={{ margin: "0px", fontWeight: "400px" }}>
-                    {user.name}
+                    {user?.name}
                   </h2>
                   <p
                     style={{

@@ -7,10 +7,16 @@ import Swal from "sweetalert2";
 window.Swal = Swal;
 function Usercreate() {
   const [groupuser, setGroupuser] = useState([]);
-  const [file,setFile]=useState(null)
-  const handlefilechange =({file}) =>{
-    setFile(file)
-  }
+  // const [file,setFile]=useState(null)
+  // const handlefilechange =({file}) =>{
+  //   setFile(file)
+  // }
+  const avatar = e => {
+    if (Array.isArray(e)) {
+      return e;
+    }
+    return e.fileList[0].originFileObj;
+  };
   const fetchGroupusers = async () => {
     const { data } = await axios.get("http://127.0.0.1:3000/group_user");
     const groupuser = data;
@@ -20,11 +26,11 @@ function Usercreate() {
     fetchGroupusers();
   }, []);
   const [form] = Form.useForm();
-  const onFinish =  (value) => {
+  const onFinish = (value) => {
     const formData = new FormData();
     Object.keys(value).forEach((key)=>formData.append(key, value[key]));
-    if(file) formData.append("avatar", file);
-    // onFinish(formData);
+    // if(file) formData.append("avatar", file);
+
     console.log(formData);
     axios
       .post("http://127.0.0.1:3000/users", formData)
@@ -36,7 +42,7 @@ function Usercreate() {
           timer: 1500,
         });
       })
-      .catch(function (err) { 
+      .catch(function (err) {
         Swal.fire({
           icon: "error",
           title: err.response.data.error,
@@ -82,7 +88,7 @@ function Usercreate() {
             <Form.Item
               name={"group_user_id"}
               label="Nhóm"
-              // rules={[{ required: true }]}
+            // rules={[{ required: true }]}
             >
               <Select>
                 {groupuser.map((option) => (
@@ -132,10 +138,21 @@ function Usercreate() {
             >
               <Input.Password />
             </Form.Item>
-            <Form.Item label="Upload">
+            {/* <Form.Item label="Upload">
               <Upload
                 beforeUpload={()=>false} onChange={handlefilechange}>
               <Button>Chose images</Button>
+              </Upload>
+            </Form.Item> */}
+            <Form.Item label="Upload" name="avatar" valuePropName="image" getValueFromEvent={avatar}>
+              <Upload beforeUpload={()=>false} multiple={false} listType="picture-card">
+                <button
+                  style={{ color: 'inherit', cursor: 'inherit', border: 0, background: 'none' }}
+                  type="button"
+                >
+                  <PlusOutlined />
+                  <div style={{ marginTop: 8 }}>Upload</div>
+                </button>
               </Upload>
             </Form.Item>
             <Form.Item>

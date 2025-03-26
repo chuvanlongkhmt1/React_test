@@ -104,7 +104,7 @@ function Header(props) {
                   marginRight: "5px",
                 }}
                 size={20}
-                src={user.avatar_url}
+                src={user?.avatar_url}
               />
               <span>{user?.name}</span>
             </Link>

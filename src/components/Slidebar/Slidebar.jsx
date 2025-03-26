@@ -32,6 +32,14 @@ const {
 function Slidebar() {
   const deletelocal = () => {
     localStorage.removeItem("user");
+    axios
+      .delete("http://localhost:3000/destroy")
+      .then(function (response) {
+        console.log(response.data);
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
   };
   const items = [
     {
