@@ -15,6 +15,7 @@ import {
 } from "@ant-design/icons";
 import styles from "./styles.module.scss";
 import { Menu } from "antd";
+import axios from "axios";
 const {
   slidebar,
   textdask,
@@ -33,7 +34,7 @@ function Slidebar() {
   const deletelocal = () => {
     localStorage.removeItem("user");
     axios
-      .delete("http://localhost:3000/destroy")
+      .post("http://localhost:3000/destroy")
       .then(function (response) {
         console.log(response.data);
       })

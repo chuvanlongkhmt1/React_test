@@ -1,4 +1,4 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import { SearchOutlined } from "@ant-design/icons";
 import { Link } from "react-router-dom";
 import {
@@ -25,6 +25,7 @@ import {
   StarOutlined,
   HistoryOutlined,
 } from "@ant-design/icons";
+import axios from "axios";
 import { UserContext } from "../../contexts/UserContext";
 function Header(props) {
   const [open, setOpen] = useState(false);
@@ -64,7 +65,6 @@ function Header(props) {
     top: "0px",
     zIndex: "1",
   };
-
   return (
     <>
       <FloatButton icon={<SettingOutlined spin />} onClick={showDrawer} />

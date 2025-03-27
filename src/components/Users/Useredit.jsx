@@ -2,16 +2,22 @@ import React, { useEffect, useState } from "react";
 import Header from "../Header/Header";
 import { useParams, useLocation } from "react-router-dom";
 import { Button, Form, Input, Card, Select, Upload } from "antd";
-import {} from "@ant-design/icons";
+import {PlusOutlined} from "@ant-design/icons";
 import axios from "axios";
 import Swal from "sweetalert2";
 window.Swal = Swal;
 import moment from "moment";
 function Useredit() {
-  const [file,setFile]=useState(null)
-  const handlefilechange =({file}) =>{
-    setFile(file)
-  }
+  // const [file,setFile]=useState(null)
+  // const handlefilechange =({file}) =>{
+  //   setFile(file)
+  // }
+  const avatar = e => {
+    if (Array.isArray(e)) {
+      return e;
+    }
+    return e.fileList[0].originFileObj;
+  };
   const [groupuser, setGroupuser] = useState([]);
   const fetchGroupusers = async () => {
     const { data } = await axios.get("http://127.0.0.1:3000/group_user");
@@ -38,11 +44,15 @@ function Useredit() {
     fetchUser();
   }, []);
   const onFinish =  (value) => {
-    const formData = new FormData();
-    Object.keys(value).forEach((key)=>formData.append(key, value[key]));
-    if(file) formData.append("avatar", file);
+    // const formData = new FormData();
+    // Object.keys(value).forEach((key)=>formData.append(key, value[key]));
     axios
-      .put("http://localhost:3000/users/" + id, formData)
+      .put("http://localhost:3000/users/" + id, value, {
+
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        }
+      })
       .then(function (response) {
         console.log(response.data);
         Swal.fire({
@@ -135,10 +145,21 @@ function Useredit() {
             >
               <Input.Password />
             </Form.Item> */}
-            <Form.Item label="Upload">
+            {/*<Form.Item label="Upload">
               <Upload
                 beforeUpload={()=>false} onChange={handlefilechange}>
               <Button>Chose images</Button>
+              </Upload>
+            </Form.Item>*/}
+            <Form.Item label="Upload" name="avatar" valuePropName="image" getValueFromEvent={avatar}>
+              <Upload beforeUpload={()=>false} multiple={false} listType="picture-card">
+                <button
+                  style={{ color: 'inherit', cursor: 'inherit', border: 0, background: 'none' }}
+                  type="button"
+                >
+                  <PlusOutlined />
+                  <div style={{ marginTop: 8 }}>Upload</div>
+                </button>
               </Upload>
             </Form.Item>
             <Form.Item>

@@ -28,13 +28,18 @@ function Usercreate() {
   }, []);
   const [form] = Form.useForm();
   const onFinish = (value) => {
-    const formData = new FormData();
-    Object.keys(value).forEach((key)=>formData.append(key, value[key]));
+    // const formData = new FormData();
+    // Object.keys(value).forEach((key)=>formData.append(key, value[key]));
     // if(file) formData.append("avatar", file);
 
-    console.log(formData);
+
     axios
-      .post("http://127.0.0.1:3000/users", formData)
+      .post("http://127.0.0.1:3000/users", value, {
+
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        }
+      })
       .then(function (response) {
         Swal.fire({
           icon: "success",

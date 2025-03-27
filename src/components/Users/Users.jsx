@@ -3,7 +3,7 @@ import Header from "../Header/Header";
 import { Space, Button, Flex, Popconfirm, Table, Input, Avatar } from "antd";
 import { Link } from "react-router-dom";
 import Highlighter from "react-highlight-words";
-import { SearchOutlined } from "@ant-design/icons";
+import { SearchOutlined, EditOutlined, DeleteOutlined } from "@ant-design/icons";
 import axios from "axios";
 import Swal from "sweetalert2";
 import dayjs from "dayjs";
@@ -207,11 +207,7 @@ function Users() {
             <>
               {g.id == record.group_user_id ? (
                 <p>
-                  <Link
-                    to={{
-                      pathname: "/groupuser/view/" + record.group_user_id,
-                    }}
-                  >
+                  <Link to={{pathname: "/groupuser/view/" + record.group_user_id,}}>
                     {g.name}
                   </Link>
                 </p>
@@ -255,7 +251,7 @@ function Users() {
               pathname: "/users/edit/" + record.id,
             }}
           >
-            Update
+          <EditOutlined />
           </Link>
           <Popconfirm
             title="Delete the task"
@@ -264,8 +260,9 @@ function Users() {
             onCancel={cancel}
             okText="Yes"
             cancelText="No"
+            placement="leftBottom"
           >
-            <a href="javascript:;">Delete</a>
+          <DeleteOutlined />
           </Popconfirm>
         </Space>
       ),
