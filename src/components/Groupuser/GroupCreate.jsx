@@ -1,35 +1,15 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import Header from "../Header/Header";
 import { Button, Form, Input, Card } from "antd";
-import {} from "@ant-design/icons";
-import axios from "axios";
-import Swal from "sweetalert2";
-window.Swal = Swal;
+import axiosClient from "../../api/axiosClient"
 function Groupcreate() {
   const [form] = Form.useForm();
-  const onFinish = async ({ group }) => {
-    axios
-      .post("http://localhost:3000/group_user", group, {
-        withCredentials: true,
-      })
-      .then(function (response) {
-        console.log(response.data);
-        Swal.fire({
-          icon: "success",
-          title: `Tạo nhóm mới thành công`,
-          showConfirmButton: false,
-          timer: 1500,
-        });
-      })
-      .catch(function (error) {
-        console.log(error);
-        Swal.showValidationMessage(err.response.data.message);
-      });
+  const onFinish = async ( group ) => {
+    axiosClient.post("/group_user", group)
   };
   const onFinishFailed = (errorInfo) => {
     console.error("Failed:", errorInfo);
   };
-
   const title = "Create";
   const getTitle = () => {
     return title;
@@ -44,10 +24,9 @@ function Groupcreate() {
             name="Groupcreate"
             onFinish={onFinish}
             onFinishFailed={onFinishFailed}
-            // validateMessages={validateMessages}
           >
             <Form.Item
-              name={["group", "name"]}
+              name={"name"}
               label="Name"
               rules={[{ required: true }]}
             >

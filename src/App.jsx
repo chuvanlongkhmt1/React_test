@@ -16,15 +16,20 @@ import Usercreate from "./components/Users/Usercreate";
 import Useredit from "./components/Users/Useredit";
 import { BrowserRouter, Routes, Route } from "react-router";
 import Profile from "./components/Profile/Profile";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { UserContext } from "./contexts/UserContext.jsx";
-import axios from "axios";
-
-axios.defaults.baseURL = "http://localhost:3000";
-axios.defaults.withCredentials = true;
+import axiosClient from "./api/axiosClient"
 function App() {
-  const localuser = JSON.parse(localStorage.getItem("user"));
-  const [user, setUser] = useState(localuser);
+  const [user, setUser] = useState(null);
+  const fetchUsers = async () => {
+    const token = localStorage.getItem("token")
+    if(!token) return;
+    const res = await axiosClient.get("/profile");
+    setUser(res.data.user);
+  };
+  useEffect(() => {
+    fetchUsers();
+  }, []);
   return (
     <UserContext.Provider value={{ user, setUser }}>
       <BrowserRouter>

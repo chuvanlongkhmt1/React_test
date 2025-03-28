@@ -1,26 +1,21 @@
 import React, { useEffect, useState, useRef } from "react";
 import Header from "../Header/Header";
 import { Space, Button, Flex, Popconfirm, Table, Input } from "antd";
-import { SearchOutlined } from "@ant-design/icons";
+import { SearchOutlined, DeleteOutlined, EditOutlined, EyeOutlined  } from "@ant-design/icons";
 import Highlighter from "react-highlight-words";
 import { Link } from "react-router-dom";
-import axios from "axios";
-import Swal from "sweetalert2";
+import axiosClient from "../../api/axiosClient"
 import dayjs from "dayjs";
 function GroupUser() {
   const [groupuser, setGroupuser] = useState([]);
   const [users, setUsers] = useState([]);
   const fetchGroup = async () => {
-    const { data } = await axios.get("http://localhost:3000/group_user", {
-      withCredentials: true,
-    });
+    const { data } = await axiosClient.get("/group_user");
     const groupuser = data;
     setGroupuser(groupuser);
   };
   const fetchUsers = async () => {
-    const { data } = await axios.get("http://localhost:3000/users", {
-      withCredentials: true,
-    });
+    const { data } = await axiosClient.get("/users");
     const users = data;
     setUsers(users);
   };
@@ -33,25 +28,7 @@ function GroupUser() {
     return title;
   };
   const handleDelete = (id) => {
-    axios
-      .delete("http://localhost:3000/group_user/" + id, {
-        withCredentials: true,
-      })
-      // .delete(`http://localhost:3000/users/${id}`)
-      .then(function (response) {
-        console.log(response.data);
-        Swal.fire({
-          icon: "success",
-          title: `Đã xóa người dùng`,
-          showConfirmButton: true,
-          preConfirm: function () {
-            return window.location.reload();
-          },
-        });
-      })
-      .catch(function (error) {
-        console.log(error);
-      });
+    axiosClient.delete("/group_user/" + id)
   };
   const cancel = (e) => {
     console.log(e);
@@ -77,11 +54,8 @@ function GroupUser() {
       close,
     }) => (
       <div
-        style={{
-          padding: 8,
-        }}
-        onKeyDown={(e) => e.stopPropagation()}
-      >
+        style={{padding: 8,}}
+        onKeyDown={(e) => e.stopPropagation()}>
         <Input
           ref={searchInput}
           placeholder={`Search ${dataIndex}`}
@@ -101,18 +75,14 @@ function GroupUser() {
             onClick={() => handleSearch(selectedKeys, confirm, dataIndex)}
             icon={<SearchOutlined />}
             size="small"
-            style={{
-              width: 90,
-            }}
+            style={{ width: 90, }}
           >
             Search
           </Button>
           <Button
             onClick={() => clearFilters && handleReset(clearFilters)}
             size="small"
-            style={{
-              width: 90,
-            }}
+            style={{ width: 90,}}
           >
             Reset
           </Button>
@@ -120,9 +90,7 @@ function GroupUser() {
             type="link"
             size="small"
             onClick={() => {
-              confirm({
-                closeDropdown: false,
-              });
+              confirm({ closeDropdown: false,});
               setSearchText(selectedKeys[0]);
               setSearchedColumn(dataIndex);
             }}
@@ -132,9 +100,7 @@ function GroupUser() {
           <Button
             type="link"
             size="small"
-            onClick={() => {
-              close();
-            }}
+            onClick={() => {close(); }}
           >
             close
           </Button>
@@ -143,9 +109,7 @@ function GroupUser() {
     ),
     filterIcon: (filtered) => (
       <SearchOutlined
-        style={{
-          color: filtered ? "#1677ff" : undefined,
-        }}
+        style={{color: filtered ? "#1677ff" : undefined,}}
       />
     ),
     onFilter: (value, record) =>
@@ -208,17 +172,15 @@ function GroupUser() {
         <Space size="middle">
           <Link
             to={{
-              pathname: "/groupuser/edit/" + record.id,
-            }}
-          >
-            Update
+              pathname: "/groupuser/view/" + record.id,
+            }}>
+            <EyeOutlined />
           </Link>
           <Link
             to={{
-              pathname: "/groupuser/view/" + record.id,
-            }}
-          >
-            View
+              pathname: "/groupuser/edit/" + record.id,
+            }}>
+            <EditOutlined />
           </Link>
           <Popconfirm
             title="Delete the task"
@@ -227,8 +189,8 @@ function GroupUser() {
             onCancel={cancel}
             okText="Yes"
             cancelText="No"
-          >
-            <a href="#">Delete</a>
+            placement="leftBottom">
+            <DeleteOutlined />
           </Popconfirm>
         </Space>
       ),

@@ -3,10 +3,7 @@ import Header from "../Header/Header";
 import { useParams, useLocation } from "react-router-dom";
 import { Button, Form, Input, Card } from "antd";
 import {} from "@ant-design/icons";
-import axios from "axios";
-import Swal from "sweetalert2";
-window.Swal = Swal;
-import moment from "moment";
+import axiosClient from "../../api/axiosClient"
 function Groupedit() {
   let { id } = useParams();
   const title = "Edit";
@@ -16,40 +13,19 @@ function Groupedit() {
   const [form] = Form.useForm();
   const [group, setGroup] = useState();
   const fetchGroup = async () => {
-    const { data } = await axios.get("http://localhost:3000/group_user/" + id, {
-      withCredentials: true,
-    });
-    setGroup(data);
-    // form.setFieldsValue(data);
-    form.setFieldsValue({ group: data });
+    const { data } = await axiosClient.get("/group_user/" + id);
+    setGroup(data.groupuser);
+    form.setFieldsValue(data.groupuser);
   };
   useEffect(() => {
     fetchGroup();
   }, []);
-  const onFinish = async ({ group }) => {
-    axios
-      .put("http://localhost:3000/group_user/" + id, group, {
-        withCredentials: true,
-      })
-      .then(function (response) {
-        console.log(response.data);
-        Swal.fire({
-          icon: "success",
-          title: `Cập nhật nhóm thành công`,
-          showConfirmButton: false,
-          timer: 1500,
-        });
-      })
-      .catch(function (error) {
-        console.log(error);
-        Swal.showValidationMessage(err.response.data.message);
-      });
+  const onFinish = async ( group ) => {
+    axiosClient.put("/group_user/" + id, group)
   };
-
   const onFinishFailed = (errorInfo) => {
     console.error("Failed:", errorInfo);
   };
-  // if (!group) return null;
   return (
     <>
       <Header getTitle={getTitle}></Header>
@@ -63,11 +39,8 @@ function Groupedit() {
             onFinishFailed={onFinishFailed}
           >
             <Form.Item
-              // name={"name"}
-              name={["group", "name"]}
+              name={"name"}
               label="Name"
-              // initialValue={group.name}
-              // rules={[{ required: true }]}
             >
               <Input />
             </Form.Item>

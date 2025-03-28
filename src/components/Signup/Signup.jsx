@@ -1,9 +1,7 @@
 import React, { useState, useContext } from "react";
 import { Link } from "react-router-dom";
 import { useNavigate } from "react-router";
-import axios from "axios";
-import Swal from "sweetalert2";
-window.Swal = Swal;
+import axiosClient from "../../api/axiosClient"
 const { Header, Footer, Content } = Layout;
 import { UserContext } from "../../contexts/UserContext";
 import {
@@ -127,26 +125,10 @@ const Signup = () => {
       label: <Link to="/signin">Sign In</Link>,
     },
   ];
-  let navigate = useNavigate();
   const { user, setUser } = useContext(UserContext);
   const [form] = Form.useForm();
   const onFinish = async (user) => {
-    axios
-      .post("http://127.0.0.1:3000/create", user, { withCredentials: true })
-      .then(function (response) {
-        localStorage.setItem("user", JSON.stringify(response.data.user));
-        console.log(response.data.error);
-        setUser(response.data.user);
-        navigate("/");
-      })
-      .catch(function (err) {
-        Swal.fire({
-          icon: "error",
-          title: err.response.data.error,
-          showConfirmButton: true,
-          // timer: 5000,
-        });
-      });
+    axiosClient.post("/create", user)
   };
   const onFinishFailed = (errorInfo) => {
     console.error("Failed:", errorInfo);

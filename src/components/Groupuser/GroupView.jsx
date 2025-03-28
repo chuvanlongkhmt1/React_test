@@ -3,47 +3,26 @@ import Header from "../Header/Header";
 import { Space, Button, Flex, Popconfirm, Table, Input } from "antd";
 import { useParams, Link } from "react-router-dom";
 import Highlighter from "react-highlight-words";
-import { SearchOutlined } from "@ant-design/icons";
-import axios from "axios";
-import Swal from "sweetalert2";
+import { SearchOutlined, DeleteOutlined, EditOutlined, } from "@ant-design/icons";
+import axiosClient from "../../api/axiosClient"
 import dayjs from "dayjs";
 function GroupView() {
   let { id } = useParams();
   const [users, setUsers] = useState([]);
+  const [groupuser, setGroupuser] = useState([]);
   const handleDelete = (id) => {
-    axios
-      .delete("http://localhost:3000/users/" + id, { withCredentials: true })
-      // .delete(`http://localhost:3000/users/${id}`)
-      .then(function (response) {
-        console.log(response.data);
-        Swal.fire({
-          icon: "success",
-          title: `Đã xóa người dùng`,
-          showConfirmButton: true,
-          preConfirm: function () {
-            return window.location.reload();
-          },
-        });
-      })
-      .catch(function (error) {
-        console.log(error);
-      });
+    axiosClient.delete("/users/" + id)
   };
   const cancel = (e) => {
     console.log(e);
   };
-  const [groupuser, setGroupuser] = useState([]);
   const fetchUsers = async () => {
-    const { data } = await axios.get("http://localhost:3000/group_user/" + id, {
-      withCredentials: true,
-    });
-    const users = data;
+    const { data } = await axiosClient.get("/group_user/" + id);
+    const users = data.user;
     setUsers(users);
   };
   const fetchGroup = async () => {
-    const { data } = await axios.get("http://127.0.0.1:3000/group_user", {
-      withCredentials: true,
-    });
+    const { data } = await axiosClient.get("/group_user");
     const groupuser = data;
     setGroupuser(groupuser);
   };
@@ -218,7 +197,7 @@ function GroupView() {
               pathname: "/users/edit/" + record.id,
             }}
           >
-            Update
+            <EditOutlined />
           </Link>
           <Popconfirm
             title="Delete the task"
@@ -228,7 +207,7 @@ function GroupView() {
             okText="Yes"
             cancelText="No"
           >
-            <a href="#">Delete</a>
+            <DeleteOutlined />
           </Popconfirm>
         </Space>
       ),

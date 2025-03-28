@@ -2,9 +2,7 @@ import React, { useContext } from "react";
 import { Link } from "react-router-dom";
 import { useNavigate } from "react-router";
 const { Header, Footer, Content } = Layout;
-import axios from "axios";
-import Swal from "sweetalert2";
-window.Swal = Swal;
+import axiosClient from "../../api/axiosClient"
 import { Button, Form, Input, Switch, Flex, Layout, Menu } from "antd";
 import { UserContext } from "../../contexts/UserContext";
 
@@ -116,12 +114,11 @@ function Signin() {
   const { user, setUser } = useContext(UserContext);
   const [form] = Form.useForm();
   const onFinish = async ({ user }) => {
-    axios
-      .post("http://localhost:3000/signin", user, { withCredentials: true })
+    axiosClient.post("/signin", user)
       .then(function (response) {
         if (response.data.logged_in === true) {
-          localStorage.setItem("user", JSON.stringify(response.data.user));
-          setUser(response.data.user);
+          const token=response.data.token
+          localStorage.setItem("token", token)
           Swal.fire({
             icon: "success",
             title: response.data.success,

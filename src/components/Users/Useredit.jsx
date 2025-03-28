@@ -1,17 +1,10 @@
 import React, { useEffect, useState } from "react";
 import Header from "../Header/Header";
-import { useParams, useLocation } from "react-router-dom";
+import { useParams,} from "react-router-dom";
 import { Button, Form, Input, Card, Select, Upload } from "antd";
 import { PlusOutlined } from "@ant-design/icons";
-import axios from "axios";
-import Swal from "sweetalert2";
-window.Swal = Swal;
-import moment from "moment";
+import axiosClient from "../../api/axiosClient"
 function Useredit() {
-  // const [file,setFile]=useState(null)
-  // const handlefilechange =({file}) =>{
-  //   setFile(file)
-  // }
   const avatar = (e) => {
     if (Array.isArray(e)) {
       return e;
@@ -19,65 +12,33 @@ function Useredit() {
     return e.fileList[0].originFileObj;
   };
   const [groupuser, setGroupuser] = useState([]);
+  const [form] = Form.useForm();
+  const [user, setUser] = useState();
+  let { id } = useParams();
   const fetchGroupusers = async () => {
-    const { data } = await axios.get("http://localhost:3000/group_user");
+    const { data } = await axiosClient.get("/group_user");
     const groupuser = data;
     setGroupuser(groupuser);
   };
+  const fetchUser = async () => {
+    const { data } = await axiosClient.get("/users/" + id);
+    setUser(data);
+    form.setFieldsValue(data);
+  };
   useEffect(() => {
     fetchGroupusers();
+    fetchUser();
   }, []);
-  let { id } = useParams();
   const title = "Edit";
   const getTitle = () => {
     return title;
   };
-  const [form] = Form.useForm();
-  const [user, setUser] = useState();
-  const fetchUser = async () => {
-    const { data } = await axios.get("http://localhost:3000/users/" + id, {
-      withCredentials: true,
-    });
-    setUser(data);
-    form.setFieldsValue(data);
-    // form.setFieldsValue({ user: data });
-  };
-  useEffect(() => {
-    fetchUser();
-  }, []);
   const onFinish = (value) => {
-    // const formData = new FormData();
-    // Object.keys(value).forEach((key)=>formData.append(key, value[key]));
-    axios
-      .put(
-        "http://localhost:3000/users/" + id,
-        value,
-        { withCredentials: true },
-        {
-          headers: {
-            "Content-Type": "multipart/form-data",
-          },
-        }
-      )
-      .then(function (response) {
-        console.log(response.data);
-        Swal.fire({
-          icon: "success",
-          title: `Cập nhật người dùng thành công`,
-          showConfirmButton: false,
-          timer: 1500,
-        });
-      })
-      .catch(function (error) {
-        console.log(error);
-        Swal.showValidationMessage(err.response.data.message);
-      });
+    axiosClient.put( "/users/" + id, value)
   };
-
   const onFinishFailed = (errorInfo) => {
     console.error("Failed:", errorInfo);
   };
-  // if (!user) return null;
   return (
     <>
       <Header getTitle={getTitle}></Header>
@@ -88,33 +49,20 @@ function Useredit() {
             name="Useredit"
             onFinish={onFinish}
             initialValues={user}
-            onFinishFailed={onFinishFailed}
-          >
+            onFinishFailed={onFinishFailed}>
             <Form.Item
-              // name={"name"}
               name={"name"}
-              label="Name"
-              // initialValue={user.name}
-              // rules={[{ required: true }]}
-            >
+              label="Name">
               <Input />
             </Form.Item>
             <Form.Item
-              // name={"age"}
               name={"age"}
-              label="Age"
-              // initialValue={user.age}
-              // rules={[{ required: true }]}
-            >
+              label="Age">
               <Input />
             </Form.Item>
             <Form.Item
               name={"group_user_id"}
-              label="Nhóm"
-
-              // initialValue={user.age}
-              // rules={[{ required: true }]}
-            >
+              label="Nhóm">
               <Select>
                 {groupuser.map((option) => (
                   <Option key={option.id} value={option.id}>
@@ -151,23 +99,15 @@ function Useredit() {
             >
               <Input.Password />
             </Form.Item> */}
-            {/*<Form.Item label="Upload">
-              <Upload
-                beforeUpload={()=>false} onChange={handlefilechange}>
-              <Button>Chose images</Button>
-              </Upload>
-            </Form.Item>*/}
             <Form.Item
               label="Upload"
               name="avatar"
               valuePropName="image"
-              getValueFromEvent={avatar}
-            >
+              getValueFromEvent={avatar}>
               <Upload
                 beforeUpload={() => false}
                 multiple={false}
-                listType="picture-card"
-              >
+                listType="picture-card">
                 <button
                   style={{
                     color: "inherit",
@@ -175,8 +115,7 @@ function Useredit() {
                     border: 0,
                     background: "none",
                   }}
-                  type="button"
-                >
+                  type="button">
                   <PlusOutlined />
                   <div style={{ marginTop: 8 }}>Upload</div>
                 </button>

@@ -1,31 +1,34 @@
 import axios from "axios";
+import Swal from "sweetalert2";
+window.Swal = Swal;
 const axiosClient = axios.create({
-  baseURL: "https://jsonplaceholder.typicode.com",
+  baseURL: "http://localhost:3000",
+  headers: { Authorization: localStorage.getItem("token"),"Content-Type": "multipart/form-data"}
 });
-const instance = axios.create();
-
-// Add a request interceptor
-instance.interceptors.request.use(
-  function (config) {
-    // Do something before request is sent
-    return config;
-  },
-  function (error) {
-    // Do something with request error
-    return Promise.reject(error);
-  }
-);
-
 // Add a response interceptor
-instance.interceptors.response.use(
-  function (response) {
-    // Any status code that lie within the range of 2xx cause this function to trigger
-    // Do something with response data
+// axiosClient.interceptors.request.use(
+//   (config) => {
+//  },
+// );
+axiosClient.interceptors.response.use(
+   (response) => {
+    if(response.data.message){
+    Swal.fire({
+      icon: "success",
+      title: response.data.message,
+      showConfirmButton: false,
+      timer: 1500,
+    });}
     return response;
   },
-  function (error) {
-    // Any status codes that falls outside the range of 2xx cause this function to trigger
-    // Do something with response error
+  (error) => {
+    const errormes = error.response?.data?.error || "error, please try again";
+    Swal.fire({
+      icon: "error",
+      title: errormes,
+      showConfirmButton: false,
+      timer: 5000,
+    });
     return Promise.reject(error);
   }
 );

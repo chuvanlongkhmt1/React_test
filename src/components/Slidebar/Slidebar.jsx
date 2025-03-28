@@ -32,7 +32,7 @@ const {
 } = styles;
 function Slidebar() {
   const deletelocal = () => {
-    localStorage.removeItem("user");
+    localStorage.removeItem("token");
     axios
       .post("http://localhost:3000/destroy")
       .then(function (response) {
