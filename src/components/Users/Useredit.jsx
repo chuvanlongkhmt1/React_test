@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import Header from "../Header/Header";
 import { useParams, useLocation } from "react-router-dom";
 import { Button, Form, Input, Card, Select, Upload } from "antd";
-import {PlusOutlined} from "@ant-design/icons";
+import { PlusOutlined } from "@ant-design/icons";
 import axios from "axios";
 import Swal from "sweetalert2";
 window.Swal = Swal;
@@ -12,7 +12,7 @@ function Useredit() {
   // const handlefilechange =({file}) =>{
   //   setFile(file)
   // }
-  const avatar = e => {
+  const avatar = (e) => {
     if (Array.isArray(e)) {
       return e;
     }
@@ -20,7 +20,7 @@ function Useredit() {
   };
   const [groupuser, setGroupuser] = useState([]);
   const fetchGroupusers = async () => {
-    const { data } = await axios.get("http://127.0.0.1:3000/group_user");
+    const { data } = await axios.get("http://localhost:3000/group_user");
     const groupuser = data;
     setGroupuser(groupuser);
   };
@@ -35,7 +35,9 @@ function Useredit() {
   const [form] = Form.useForm();
   const [user, setUser] = useState();
   const fetchUser = async () => {
-    const { data } = await axios.get("http://127.0.0.1:3000/users/" + id);
+    const { data } = await axios.get("http://localhost:3000/users/" + id, {
+      withCredentials: true,
+    });
     setUser(data);
     form.setFieldsValue(data);
     // form.setFieldsValue({ user: data });
@@ -43,16 +45,20 @@ function Useredit() {
   useEffect(() => {
     fetchUser();
   }, []);
-  const onFinish =  (value) => {
+  const onFinish = (value) => {
     // const formData = new FormData();
     // Object.keys(value).forEach((key)=>formData.append(key, value[key]));
     axios
-      .put("http://localhost:3000/users/" + id, value, {
-
-        headers: {
-          'Content-Type': 'multipart/form-data',
+      .put(
+        "http://localhost:3000/users/" + id,
+        value,
+        { withCredentials: true },
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
         }
-      })
+      )
       .then(function (response) {
         console.log(response.data);
         Swal.fire({
@@ -117,7 +123,7 @@ function Useredit() {
                 ))}
               </Select>
             </Form.Item>
-            <Form.Item name={ "email"} label="Email">
+            <Form.Item name={"email"} label="Email">
               <Input />
             </Form.Item>
             <Form.Item name={"password"} label="Password" hasFeedback>
@@ -151,10 +157,24 @@ function Useredit() {
               <Button>Chose images</Button>
               </Upload>
             </Form.Item>*/}
-            <Form.Item label="Upload" name="avatar" valuePropName="image" getValueFromEvent={avatar}>
-              <Upload beforeUpload={()=>false} multiple={false} listType="picture-card">
+            <Form.Item
+              label="Upload"
+              name="avatar"
+              valuePropName="image"
+              getValueFromEvent={avatar}
+            >
+              <Upload
+                beforeUpload={() => false}
+                multiple={false}
+                listType="picture-card"
+              >
                 <button
-                  style={{ color: 'inherit', cursor: 'inherit', border: 0, background: 'none' }}
+                  style={{
+                    color: "inherit",
+                    cursor: "inherit",
+                    border: 0,
+                    background: "none",
+                  }}
                   type="button"
                 >
                   <PlusOutlined />

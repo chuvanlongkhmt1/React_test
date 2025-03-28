@@ -3,7 +3,11 @@ import Header from "../Header/Header";
 import { Space, Button, Flex, Popconfirm, Table, Input, Avatar } from "antd";
 import { Link } from "react-router-dom";
 import Highlighter from "react-highlight-words";
-import { SearchOutlined, EditOutlined, DeleteOutlined } from "@ant-design/icons";
+import {
+  SearchOutlined,
+  EditOutlined,
+  DeleteOutlined,
+} from "@ant-design/icons";
 import axios from "axios";
 import Swal from "sweetalert2";
 import dayjs from "dayjs";
@@ -12,7 +16,7 @@ function Users() {
   const [groupuser, setGroupuser] = useState([]);
   const handleDelete = (id) => {
     axios
-      .delete("http://localhost:3000/users/" + id)
+      .delete("http://localhost:3000/users/" + id, { withCredentials: true })
       // .delete(`http://localhost:3000/users/${id}`)
       .then(function (response) {
         console.log(response.data);
@@ -33,12 +37,16 @@ function Users() {
     console.log(e);
   };
   const fetchGroupusers = async () => {
-    const { data } = await axios.get("http://127.0.0.1:3000/group_user");
+    const { data } = await axios.get("http://localhost:3000/group_user", {
+      withCredentials: true,
+    });
     const groupuser = data;
     setGroupuser(groupuser);
   };
   const fetchUsers = async () => {
-    const { data } = await axios.get("http://127.0.0.1:3000/users");
+    const { data } = await axios.get("http://localhost:3000/users", {
+      withCredentials: true,
+    });
     const users = data;
     setUsers(users);
   };
@@ -171,7 +179,7 @@ function Users() {
       title: "Avatar",
       dataIndex: "avatar_url",
       key: "avatar_url",
-      render:(url) => (url? <Avatar src={url}/> :"no images")
+      render: (url) => (url ? <Avatar src={url} /> : "no images"),
     },
     {
       title: "Name",
@@ -207,7 +215,9 @@ function Users() {
             <>
               {g.id == record.group_user_id ? (
                 <p>
-                  <Link to={{pathname: "/groupuser/view/" + record.group_user_id,}}>
+                  <Link
+                    to={{ pathname: "/groupuser/view/" + record.group_user_id }}
+                  >
                     {g.name}
                   </Link>
                 </p>
@@ -251,7 +261,7 @@ function Users() {
               pathname: "/users/edit/" + record.id,
             }}
           >
-          <EditOutlined />
+            <EditOutlined />
           </Link>
           <Popconfirm
             title="Delete the task"
@@ -262,7 +272,7 @@ function Users() {
             cancelText="No"
             placement="leftBottom"
           >
-          <DeleteOutlined />
+            <DeleteOutlined />
           </Popconfirm>
         </Space>
       ),

@@ -16,7 +16,9 @@ function Groupedit() {
   const [form] = Form.useForm();
   const [group, setGroup] = useState();
   const fetchGroup = async () => {
-    const { data } = await axios.get("http://127.0.0.1:3000/group_user/" + id);
+    const { data } = await axios.get("http://localhost:3000/group_user/" + id, {
+      withCredentials: true,
+    });
     setGroup(data);
     // form.setFieldsValue(data);
     form.setFieldsValue({ group: data });
@@ -26,7 +28,9 @@ function Groupedit() {
   }, []);
   const onFinish = async ({ group }) => {
     axios
-      .put("http://localhost:3000/group_user/" + id, group)
+      .put("http://localhost:3000/group_user/" + id, group, {
+        withCredentials: true,
+      })
       .then(function (response) {
         console.log(response.data);
         Swal.fire({

@@ -132,7 +132,7 @@ const Signup = () => {
   const [form] = Form.useForm();
   const onFinish = async (user) => {
     axios
-      .post("http://127.0.0.1:3000/create", user)
+      .post("http://127.0.0.1:3000/create", user, { withCredentials: true })
       .then(function (response) {
         localStorage.setItem("user", JSON.stringify(response.data.user));
         console.log(response.data.error);

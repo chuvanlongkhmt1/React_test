@@ -12,7 +12,7 @@ function GroupView() {
   const [users, setUsers] = useState([]);
   const handleDelete = (id) => {
     axios
-      .delete("http://localhost:3000/users/" + id)
+      .delete("http://localhost:3000/users/" + id, { withCredentials: true })
       // .delete(`http://localhost:3000/users/${id}`)
       .then(function (response) {
         console.log(response.data);
@@ -34,12 +34,16 @@ function GroupView() {
   };
   const [groupuser, setGroupuser] = useState([]);
   const fetchUsers = async () => {
-    const { data } = await axios.get("http://localhost:3000/group_user/" + id);
+    const { data } = await axios.get("http://localhost:3000/group_user/" + id, {
+      withCredentials: true,
+    });
     const users = data;
     setUsers(users);
   };
   const fetchGroup = async () => {
-    const { data } = await axios.get("http://127.0.0.1:3000/group_user");
+    const { data } = await axios.get("http://127.0.0.1:3000/group_user", {
+      withCredentials: true,
+    });
     const groupuser = data;
     setGroupuser(groupuser);
   };

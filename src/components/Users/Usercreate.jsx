@@ -11,15 +11,17 @@ function Usercreate() {
   // const handlefilechange =({file}) =>{
   //   setFile(file)
   // }
-  
-  const avatar = e => {
+
+  const avatar = (e) => {
     if (Array.isArray(e)) {
       return e;
     }
     return e.fileList[0].originFileObj;
   };
   const fetchGroupusers = async () => {
-    const { data } = await axios.get("http://127.0.0.1:3000/group_user");
+    const { data } = await axios.get("http://localhost:3000/group_user", {
+      withCredentials: true,
+    });
     const groupuser = data;
     setGroupuser(groupuser);
   };
@@ -32,14 +34,17 @@ function Usercreate() {
     // Object.keys(value).forEach((key)=>formData.append(key, value[key]));
     // if(file) formData.append("avatar", file);
 
-
     axios
-      .post("http://127.0.0.1:3000/users", value, {
-
-        headers: {
-          'Content-Type': 'multipart/form-data',
+      .post(
+        "http://localhost:3000/users",
+        value,
+        { withCredentials: true },
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
         }
-      })
+      )
       .then(function (response) {
         Swal.fire({
           icon: "success",
@@ -75,26 +80,18 @@ function Usercreate() {
             name="Usercreate"
             onFinish={onFinish}
             onFinishFailed={onFinishFailed}
-          // validateMessages={validateMessages}
+            // validateMessages={validateMessages}
           >
-            <Form.Item
-              name={"name"}
-              label="Name"
-              rules={[{ required: true }]}
-            >
+            <Form.Item name={"name"} label="Name" rules={[{ required: true }]}>
               <Input />
             </Form.Item>
-            <Form.Item
-              name={"age"}
-              label="Age"
-              rules={[{ required: true }]}
-            >
+            <Form.Item name={"age"} label="Age" rules={[{ required: true }]}>
               <Input />
             </Form.Item>
             <Form.Item
               name={"group_user_id"}
               label="Nhóm"
-            // rules={[{ required: true }]}
+              // rules={[{ required: true }]}
             >
               <Select>
                 {groupuser.map((option) => (
@@ -150,10 +147,24 @@ function Usercreate() {
               <Button>Chose images</Button>
               </Upload>
             </Form.Item> */}
-            <Form.Item label="Upload" name="avatar" valuePropName="image" getValueFromEvent={avatar}>
-              <Upload beforeUpload={()=>false} multiple={false} listType="picture-card">
+            <Form.Item
+              label="Upload"
+              name="avatar"
+              valuePropName="image"
+              getValueFromEvent={avatar}
+            >
+              <Upload
+                beforeUpload={() => false}
+                multiple={false}
+                listType="picture-card"
+              >
                 <button
-                  style={{ color: 'inherit', cursor: 'inherit', border: 0, background: 'none' }}
+                  style={{
+                    color: "inherit",
+                    cursor: "inherit",
+                    border: 0,
+                    background: "none",
+                  }}
                   type="button"
                 >
                   <PlusOutlined />
