@@ -1,6 +1,5 @@
 import React, { useState, useContext } from "react";
 import { Link } from "react-router-dom";
-import { useNavigate } from "react-router";
 import axiosClient from "../../api/axiosClient"
 const { Header, Footer, Content } = Layout;
 import { UserContext } from "../../contexts/UserContext";
@@ -125,7 +124,6 @@ const Signup = () => {
       label: <Link to="/signin">Sign In</Link>,
     },
   ];
-  const { user, setUser } = useContext(UserContext);
   const [form] = Form.useForm();
   const onFinish = async (user) => {
     axiosClient.post("/create", user)

@@ -1,11 +1,9 @@
-import React, { useContext } from "react";
+import React from "react";
 import { Link } from "react-router-dom";
-import { useNavigate } from "react-router";
 const { Header, Footer, Content } = Layout;
 import axiosClient from "../../api/axiosClient"
 import { Button, Form, Input, Switch, Flex, Layout, Menu } from "antd";
 import { UserContext } from "../../contexts/UserContext";
-
 import {
   ChromeOutlined,
   GithubOutlined,
@@ -110,36 +108,13 @@ function Signin() {
       label: <Link to="/signup">Sign Up</Link>,
     },
   ];
-  let navigate = useNavigate();
-  const { user, setUser } = useContext(UserContext);
   const [form] = Form.useForm();
   const onFinish = async ({ user }) => {
     axiosClient.post("/signin", user)
       .then(function (response) {
-        if (response.data.logged_in === true) {
           const token=response.data.token
           localStorage.setItem("token", token)
-          Swal.fire({
-            icon: "success",
-            title: response.data.success,
-            showConfirmButton: false,
-            timer: 500,
-          });
-          navigate("/");
-        } else {
-          Swal.fire({
-            icon: "error",
-            title: response.data.error,
-            showConfirmButton: false,
-            timer: 1500,
-          });
-          console.log(response.data.error);
-        }
       })
-      .catch(function (error) {
-        console.log(error);
-        Swal.showValidationMessage(error);
-      });
   };
   const onFinishFailed = (errorInfo) => {
     console.error("Failed:", errorInfo);

@@ -15,7 +15,6 @@ import {
 } from "@ant-design/icons";
 import styles from "./styles.module.scss";
 import { Menu } from "antd";
-import axios from "axios";
 const {
   slidebar,
   textdask,
@@ -33,14 +32,7 @@ const {
 function Slidebar() {
   const deletelocal = () => {
     localStorage.removeItem("token");
-    axios
-      .post("http://localhost:3000/destroy")
-      .then(function (response) {
-        console.log(response.data);
-      })
-      .catch(function (error) {
-        console.log(error);
-      });
+    window.location="/signin"
   };
   const items = [
     {
@@ -115,7 +107,7 @@ function Slidebar() {
           key: "Logout",
           icon: <LogoutOutlined />,
           label: (
-            <Link to="/signin" onClick={deletelocal}>
+            <Link onClick={deletelocal}>
               Log out
             </Link>
           ),
@@ -127,7 +119,6 @@ function Slidebar() {
   const onClick = (e) => {
     console.log("click ", e);
   };
-  const location = useLocation();
   return (
     <>
       <div className={pos}>
@@ -137,8 +128,6 @@ function Slidebar() {
               background: "none",
               borderInlineEnd: "none",
             }}
-            onClick={onClick}
-            defaultSelectedKeys={location.pathname}
             items={items}
           />
 

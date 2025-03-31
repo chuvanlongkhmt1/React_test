@@ -3,13 +3,9 @@ import Swal from "sweetalert2";
 window.Swal = Swal;
 const axiosClient = axios.create({
   baseURL: "http://localhost:3000",
-  headers: { Authorization: localStorage.getItem("token"),"Content-Type": "multipart/form-data"}
+  headers: { Authorization: localStorage.getItem("token"),"Content-Type": "multipart/form-data", "Content-Type": "application/json"}
 });
 // Add a response interceptor
-// axiosClient.interceptors.request.use(
-//   (config) => {
-//  },
-// );
 axiosClient.interceptors.response.use(
    (response) => {
     if(response.data.message){
@@ -18,7 +14,13 @@ axiosClient.interceptors.response.use(
       title: response.data.message,
       showConfirmButton: false,
       timer: 1500,
-    });}
+    });
+    if(response.data.redirect==='reload'){
+      window.location.reload();
+    }else{
+      window.location = (response.data.redirect)
+    }
+    }
     return response;
   },
   (error) => {
@@ -27,8 +29,11 @@ axiosClient.interceptors.response.use(
       icon: "error",
       title: errormes,
       showConfirmButton: false,
-      timer: 5000,
+      timer: 1500,
     });
+    if(error.response.data.redirect==='/signin'){
+      window.location = (error.response.data.redirect)
+    }
     return Promise.reject(error);
   }
 );
