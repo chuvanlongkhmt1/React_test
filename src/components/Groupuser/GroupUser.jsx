@@ -6,23 +6,18 @@ import Highlighter from "react-highlight-words";
 import { Link } from "react-router-dom";
 import axiosClient from "../../api/axiosClient"
 import dayjs from "dayjs";
+import { useQuery } from 'react-query'
 function GroupUser() {
-  const [groupuser, setGroupuser] = useState([]);
-  const [users, setUsers] = useState([]);
-  const fetchGroup = async () => {
-    const { data } = await axiosClient.get("/group_user");
-    const groupuser = data;
-    setGroupuser(groupuser);
-  };
-  const fetchUsers = async () => {
-    const { data } = await axiosClient.get("/users");
-    const users = data;
-    setUsers(users);
-  };
-  useEffect(() => {
-    fetchGroup();
-    fetchUsers();
-  }, []);
+  async function fetchUsers() {
+    const res = await axiosClient.get("/groupusers");
+    return res.data;
+    }
+  const { data: groupusers,} = useQuery(['groupuser'], fetchUsers)
+  async function fetchUsers() {
+    const res = await axiosClient.get("/users");
+    return res.data;
+    }
+  const { data: users,} = useQuery(['user'], fetchUsers)
   const title = " Group Users";
   const getTitle = () => {
     return title;
@@ -222,7 +217,7 @@ function GroupUser() {
         <Table
           columns={columns}
           rowKey={(record) => record.id}
-          dataSource={groupuser}
+          dataSource={groupusers}
         />
       </div>
     </>

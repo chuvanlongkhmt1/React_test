@@ -1,44 +1,24 @@
 import React, { useEffect, useState, useRef } from "react";
 import Header from "../Header/Header";
-import { Space, Button, Flex, Popconfirm, Table, Input, Avatar } from "antd";
+import { Space, Button, Flex, Popconfirm, Table, Input} from "antd";
 import { Link } from "react-router-dom";
 import Highlighter from "react-highlight-words";
 import { SearchOutlined } from "@ant-design/icons";
-import axios from "axios";
-import Swal from "sweetalert2";
+import axiosClient from "../../api/axiosClient";
+import { useQuery } from 'react-query'
 import dayjs from "dayjs";
-function Test() {
-  const [posts, setPosts] = useState([]);
+function Post() {
   const handleDelete = (id) => {
-    axios
-      .delete("http://localhost:3000/posts/" + id)
-      .then(function (response) {
-        console.log(response.data);
-        Swal.fire({
-          icon: "success",
-          title: `Đã xóa`,
-          showConfirmButton: true,
-          preConfirm: function () {
-            return window.location.reload();
-          },
-        });
-      })
-      .catch(function (error) {
-        console.log(error);
-      });
+    axiosClient.delete("http://localhost:3000/posts/" + id)
   };
   const cancel = (e) => {
     console.log(e);
   };
-
-  const fetchUsers = async () => {
-    const { data } = await axios.get("http://127.0.0.1:3000/posts");
-    const posts = data;
-    setPosts(posts);
-  };
-  useEffect(() => {
-    fetchUsers();
-  }, []);
+  async function fetchUsers() {
+    const res = await axiosClient.get("/posts");
+    return res.data;
+    }
+  const { data, error, isError, isLoading } = useQuery(['post'], fetchUsers)
   const title = "Posts";
   const getTitle = () => {
     return title;
@@ -161,12 +141,6 @@ function Test() {
   });
   const columns = [
     {
-      title: "Images",
-      dataIndex: "images",
-      key: "images",
-      // render:(_, record) => (url? <Avatar src={record.url}/> :"no images")
-    },
-    {
       title: "Title",
       dataIndex: "title",
       key: "title",
@@ -207,13 +181,13 @@ function Test() {
       key: "action",
       render: (_, record) => (
         <Space size="middle">
-          {/* <Link
+          <Link
             to={{
               pathname: "/users/edit/" + record.id,
             }}
           >
             Update
-          </Link> */}
+          </Link>
           <Popconfirm
             title="Delete the task"
             description="Are you sure to delete this task?"
@@ -228,6 +202,9 @@ function Test() {
       ),
     },
   ];
+  if (isLoading) {
+    return <span>Đang tải...</span>
+  }
   return (
     <>
       <Header getTitle={getTitle} />
@@ -244,16 +221,16 @@ function Test() {
         <Flex justify="space-between">
           <h1>Danh sách post</h1>{" "}
           <Button>
-            <Link to="/test/create">Tạo Post</Link>
+            <Link to="/post/create">Tạo Post</Link>
           </Button>
         </Flex>
         <Table
           columns={columns}
           rowKey={(record) => record.id}
-          dataSource={posts}
+          dataSource={data}
         />
       </div>
     </>
   );
 }
-export default Test;
+export default Post;

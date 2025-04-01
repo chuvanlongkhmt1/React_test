@@ -9,18 +9,18 @@ const axiosClient = axios.create({
 axiosClient.interceptors.response.use(
    (response) => {
     if(response.data.message){
-    Swal.fire({
-      icon: "success",
-      title: response.data.message,
-      showConfirmButton: false,
-      timer: 1500,
-    });
-    if(response.data.redirect==='reload'){
-      window.location.reload();
-    }else{
-      window.location = (response.data.redirect)
-    }
-    }
+      Swal.fire({
+        icon: "success",
+        title: response.data.message,
+        showConfirmButton: false,
+        timer: 1500,
+      });
+      if(response.data.redirect==='reload'){
+        window.location.reload();
+      }else{
+        window.location = (response.data.redirect)
+      }
+      }
     return response;
   },
   (error) => {

@@ -6,29 +6,24 @@ import Highlighter from "react-highlight-words";
 import {SearchOutlined, EditOutlined, DeleteOutlined} from "@ant-design/icons";
 import axiosClient from "../../api/axiosClient"
 import dayjs from "dayjs";
+import { useQuery } from 'react-query'
 function Users() {
-  const [users, setUsers] = useState([]);
-  const [groupuser, setGroupuser] = useState([]);
   const handleDelete = (id) => {
     axiosClient.delete("/users/" + id)
   };
   const cancel = (e) => {
     console.log(e);
   };
-  const fetchGroupusers = async () => {
-    const { data } = await axiosClient.get("/group_user");
-    const groupuser = data;
-    setGroupuser(groupuser);
-  };
-  const fetchUsers = async () => {
-    const { data } = await axiosClient.get("/users");
-    const users = data;
-    setUsers(users);
-  };
-  useEffect(() => {
-    fetchUsers();
-    fetchGroupusers();
-  }, []);
+  async function fetchUsers() {
+    const res = await axiosClient.get("/groupusers");
+    return res.data;
+    }
+  const { data: groupusers,} = useQuery(['groupuser'], fetchUsers)
+  async function fetchUsers() {
+    const res = await axiosClient.get("/users");
+    return res.data;
+    }
+  const { data: users,} = useQuery(['user'], fetchUsers)
   const title = "Users";
   const getTitle = () => {
     return title;
@@ -183,15 +178,15 @@ function Users() {
       dataIndex: "group_user_id",
       key: "group_user_id",
       render: (_, record) =>
-        groupuser.map((g) => {
+        groupusers.map((groupuser) => {
           return (
             <>
-              {g.id == record.group_user_id ? (
+              {groupuser.id == record.group_user_id ? (
                 <p>
                   <Link
                     to={{ pathname: "/groupuser/view/" + record.group_user_id }}
                   >
-                    {g.name}
+                    {groupuser.name}
                   </Link>
                 </p>
               ) : (
@@ -271,7 +266,7 @@ function Users() {
         </Flex>
         <Table
           columns={columns}
-          rowKey={(record) => record.id}
+          rowKey={(user) => user.id}
           dataSource={users}/>
       </div>
     </>

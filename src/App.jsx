@@ -3,8 +3,8 @@ import Home from "./components/Home/Home";
 import Signin from "./components/Signin/Signin";
 import Signup from "./components/Signup/Signup";
 import Table from "./components/Table/Table";
-import Test from "./components/Test/Test";
-import TestCreate from "./components/Test/TestCreate";
+import Post from "./components/Post/Post.jsx";
+import PostCreate from "./components/Post/PostCreate.jsx";
 import Billing from "./components/Billing/Billing";
 import Listmus from "./components/Listmus/Listmus";
 import GroupUser from "./components/Groupuser/GroupUser.jsx";
@@ -19,6 +19,9 @@ import Profile from "./components/Profile/Profile";
 import { useState, useEffect } from "react";
 import { UserContext } from "./contexts/UserContext.jsx";
 import axiosClient from "./api/axiosClient"
+import { QueryClient, QueryClientProvider } from 'react-query';
+
+const queryClient = new QueryClient();
 function App() {
   const [user, setUser] = useState(null);
   const fetchUsers = async () => {
@@ -31,15 +34,16 @@ function App() {
     fetchUsers();
   }, []);
   return (
+    <QueryClientProvider client={queryClient}>
     <UserContext.Provider value={{ user, setUser }}>
       <BrowserRouter>
         <Routes>
-          {/* {user == null ? ( */}
+          {user == null ? (
           <Route>
             <Route path="/signup" element={<Signup />} />
             <Route path="/signin" element={<Signin />} />
           </Route>
-          {/* ) : ( */}
+          ) : (
           <Route exact path="/" element={<Pagelayout />}>
             <Route index element={<Home />} />
             <Route path="table" element={<Table />} />
@@ -53,13 +57,15 @@ function App() {
             <Route path="users" element={<Users />} />
             <Route path="users/create/" element={<Usercreate />} />
             <Route path="users/edit/:id" element={<Useredit />} />
-            <Route path="test" element={<Test />} />
-            <Route path="test/create/" element={<TestCreate />} />
+            <Route path="post" element={<Post />} />
+            <Route path="post/create/" element={<PostCreate />} />
           </Route>
-          {/* )} */}
-        </Routes>
+          )}
+       </Routes>
       </BrowserRouter>
-    </UserContext.Provider>
+    </UserContext.Provider> 
+
+    </QueryClientProvider>
   );
 }
 export default App;
