@@ -82,9 +82,14 @@ function Slidebar() {
           label: <Link to="/users">Users</Link>,
         },
         {
-          key: "/post",
+          key: "/posts",
           icon: <CaretLeftOutlined />,
-          label: <Link to="/post">Test</Link>,
+          label: <Link to="/posts">Post</Link>,
+        },
+        {
+          key: "/projectlist",
+          icon: <CaretLeftOutlined />,
+          label: <Link to="/projectlist">Test</Link>,
         },
       ],
     },

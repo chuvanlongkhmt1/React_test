@@ -8,11 +8,11 @@ import axiosClient from "../../api/axiosClient"
 import dayjs from "dayjs";
 import { useQuery } from 'react-query'
 function GroupUser() {
-  async function fetchUsers() {
-    const res = await axiosClient.get("/groupusers");
+  async function fetchGroupUsers() {
+    const res = await axiosClient.get("/group_user");
     return res.data;
     }
-  const { data: groupusers,} = useQuery(['groupuser'], fetchUsers)
+  const { data: groupusers,} = useQuery(['groupuser'], fetchGroupUsers)
   async function fetchUsers() {
     const res = await axiosClient.get("/users");
     return res.data;
@@ -191,10 +191,6 @@ function GroupUser() {
       ),
     },
   ];
-  // const user=
-  const expandedRowRender = () => (
-    <Table columns={expandColumns} dataSource={users} pagination={false} />
-  );
   return (
     <>
       <Header getTitle={getTitle} />

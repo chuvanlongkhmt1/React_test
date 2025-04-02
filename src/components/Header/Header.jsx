@@ -71,10 +71,16 @@ function Header(props) {
       <div style={headerstyle}>
         <Flex wrap justify="space-between">
           <div>
-            <Breadcrumb>
-              <Breadcrumb.Item>Pages</Breadcrumb.Item>
-              <Breadcrumb.Item>{props.getTitle()}</Breadcrumb.Item>
-            </Breadcrumb>
+            <Breadcrumb
+              items={[
+                {
+                  title: 'Pages',
+                },
+                {
+                  title: <a href="">{props.getTitle()}</a>,
+                },
+              ]}
+            />
             <h3 style={{ lineHeight: "16px" }}>{props.getTitle()}</h3>
           </div>
           <Flex wrap gap="small" className={box}>

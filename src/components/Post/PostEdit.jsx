@@ -1,21 +1,26 @@
 import React from "react";
+import { useParams,} from "react-router-dom";
 import Header from "../Header/Header";
 import { Button, Form, Input, Card } from "antd";
 import axiosClient from "../../api/axiosClient"
-import {useMutation, useQueryClient} from 'react-query';
-function PostCreate() {
-  const queryClient = useQueryClient();
+import { useQuery, useMutation, useQueryClient } from 'react-query'
+function PostEdit() {
+  let { id } = useParams();
   const [form] = Form.useForm();
-  async function addPost (post) {
-    axiosClient.post("/posts", post)
-    // const res = await axiosClient.post("/posts", post)
-    // return res.data
+  const queryClient= useQueryClient();
+  async function fetchPost() {
+    const res = await axiosClient.get("/posts/"+ id);
+    form.setFieldsValue(res.data);
+    return res.data;
+  }
+  const { data: post, isLoading } = useQuery(['post'], fetchPost )
+  async function editPost (post) {
+    const res = await axiosClient.put("/posts/"+ id, post)
+    return res.data
   };
-  const addMutation = useMutation({ mutationFn: addPost,
-    //  onSuccess: () => queryClient.invalidateQueries(['post']) 
-    });
+  const editMutation = useMutation({ mutationFn: editPost, onSuccess: () => queryClient.invalidateQueries(['post'])});
   const onFinish = ( post ) => {
-    addMutation.mutate(post);
+    editMutation.mutate(post);
   };
   const onFinishFailed = (errorInfo) => {
     console.error("Failed:", errorInfo);
@@ -28,12 +33,13 @@ function PostCreate() {
     <>
       <Header getTitle={getTitle}></Header>
       <div style={{ padding: "20px 40px" }}>
-        <Card title="Thêm người dùng" style={{ padding: "20px 40px" }}>
+        <Card title="Edit " style={{ padding: "20px 40px" }}>
           <Form
             form={form}
             name="Groupcreate"
             onFinish={onFinish}
             onFinishFailed={onFinishFailed}
+            initialValues={post}
           >
             <Form.Item
               name={"title"}
@@ -51,7 +57,7 @@ function PostCreate() {
             </Form.Item>
             <Form.Item>
               <Button type="primary" htmlType="submit">
-                Thêm mới
+                Update
               </Button>
             </Form.Item>
           </Form>
@@ -60,5 +66,4 @@ function PostCreate() {
     </>
   );
 }
-
-export default PostCreate;
+export default PostEdit;

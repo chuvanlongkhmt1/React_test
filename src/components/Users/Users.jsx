@@ -3,27 +3,30 @@ import Header from "../Header/Header";
 import { Space, Button, Flex, Popconfirm, Table, Input, Avatar } from "antd";
 import { Link } from "react-router-dom";
 import Highlighter from "react-highlight-words";
-import {SearchOutlined, EditOutlined, DeleteOutlined} from "@ant-design/icons";
+import { SearchOutlined, EditOutlined, DeleteOutlined } from "@ant-design/icons";
 import axiosClient from "../../api/axiosClient"
 import dayjs from "dayjs";
-import { useQuery } from 'react-query'
+import { useQuery, useQueryClient, useMutation } from 'react-query'
 function Users() {
+  const queryClient = useQueryClient();
+  async function deleteUser(id) {
+    const res = await axiosClient.delete("/users/" + id)
+    return res.data
+  };
+  const deleteMutation = useMutation({ mutationFn: deleteUser, onSuccess: () => { queryClient.invalidateQueries(['users']) } });
   const handleDelete = (id) => {
-    axiosClient.delete("/users/" + id)
+    deleteMutation.mutate(id);
   };
-  const cancel = (e) => {
-    console.log(e);
-  };
-  async function fetchUsers() {
-    const res = await axiosClient.get("/groupusers");
+  async function fetchGroupUsers() {
+    const res = await axiosClient.get("/group_user");
     return res.data;
-    }
-  const { data: groupusers,} = useQuery(['groupuser'], fetchUsers)
+  }
+  const { data: groupusers, } = useQuery(['groupusers'], fetchGroupUsers)
   async function fetchUsers() {
     const res = await axiosClient.get("/users");
     return res.data;
-    }
-  const { data: users,} = useQuery(['user'], fetchUsers)
+  }
+  const { data: users, } = useQuery(['users'], fetchUsers)
   const title = "Users";
   const getTitle = () => {
     return title;
@@ -49,7 +52,7 @@ function Users() {
       close,
     }) => (
       <div
-        style={{padding: 8,}}
+        style={{ padding: 8, }}
         onKeyDown={(e) => e.stopPropagation()}
       >
         <Input
@@ -180,19 +183,17 @@ function Users() {
       render: (_, record) =>
         groupusers.map((groupuser) => {
           return (
-            <>
+            <p key={groupuser.id}>
               {groupuser.id == record.group_user_id ? (
-                <p>
-                  <Link
-                    to={{ pathname: "/groupuser/view/" + record.group_user_id }}
-                  >
-                    {groupuser.name}
-                  </Link>
-                </p>
+                <Link
+                  to={{ pathname: "/groupuser/view/" + record.group_user_id }}
+                >
+                  {groupuser.name}
+                </Link>
               ) : (
                 ""
               )}
-            </>
+            </p>
           );
         }),
       // ...getColumnSearchProps("nhóm"),
@@ -266,8 +267,8 @@ function Users() {
         </Flex>
         <Table
           columns={columns}
-          rowKey={(user) => user.id}
-          dataSource={users}/>
+          rowKey={(users) => users.id}
+          dataSource={users} />
       </div>
     </>
   );

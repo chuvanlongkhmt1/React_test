@@ -227,12 +227,9 @@ function GroupView() {
         }}
       >
         <Flex justify="space-between">
-          <h1>
-            Danh sách người dùng{" "}
-            {groupuser.map((g) => {
-              return <>{g.id == id ? <>{g.name}</> : ""}</>;
-            })}
-          </h1>
+          {groupuser.map((g) => {
+            return < >{g.id == id ? <h1 key={g.id}> Danh sách người dùng {g.name}</h1> : ""}</>;
+          })}
           <Button>
             <Link to="/users/create">Tạo người dùng</Link>
           </Button>

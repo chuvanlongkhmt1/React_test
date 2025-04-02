@@ -21,7 +21,7 @@ const items = [
 ];
 const Footer = () => {
   return (
-    <Flex style={{ alignItems: "center", justifyContent: "space-between" }}>
+    <Flex style={{ alignItems: "center", justifyContent: "space-between", paddingLeft:"20px"}}>
       <div>
         ©{new Date().getFullYear()}, made with
         <HeartFilled style={{ color: "red" }} />

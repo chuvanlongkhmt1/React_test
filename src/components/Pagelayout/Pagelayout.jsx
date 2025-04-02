@@ -1,10 +1,8 @@
 import Slidebar from "../Slidebar/Slidebar";
-import Footerr from "../Footer/Footer";
+import Footer from "../Footer/Footer";
 import { Layout } from "antd";
-import { SettingOutlined } from "@ant-design/icons";
-import ReactDOM from "react-dom/client";
-import { Outlet, Link } from "react-router-dom";
-const { Footer, Sider, Content } = Layout;
+import { Outlet,} from "react-router-dom";
+const {Sider, Content } = Layout;
 function Pagelayout() {
   const siderStyle = {
     overflow: "auto",
@@ -27,11 +25,10 @@ function Pagelayout() {
           <Content>
             <Outlet />
           </Content>
-          <Footer>{/* <Footerr /> */}</Footer>
+          <Footer/>
         </Layout>
       </Layout>
     </div>
   );
 }
-const root = ReactDOM.createRoot(document.getElementById("root"));
 export default Pagelayout;

@@ -1,24 +1,30 @@
 import React, { useEffect, useState, useRef } from "react";
 import Header from "../Header/Header";
-import { Space, Button, Flex, Popconfirm, Table, Input} from "antd";
+import { Space, Button, Flex, Popconfirm, Table, Input, Modal, Form} from "antd";
 import { Link } from "react-router-dom";
 import Highlighter from "react-highlight-words";
 import { SearchOutlined } from "@ant-design/icons";
 import axiosClient from "../../api/axiosClient";
-import { useQuery } from 'react-query'
+import { useQuery, useMutation, useQueryClient} from 'react-query'
 import dayjs from "dayjs";
 function Post() {
+  const queryClient = useQueryClient();
+  async function deletePost (id) {
+    const res = await axiosClient.delete("/posts/" + id)
+    return res.data;
+  };
+  const deleteMutation = useMutation({ mutationFn: deletePost, onSuccess: () => queryClient.invalidateQueries(['posts']) });
   const handleDelete = (id) => {
-    axiosClient.delete("http://localhost:3000/posts/" + id)
+    deleteMutation.mutate(id);
   };
   const cancel = (e) => {
     console.log(e);
   };
-  async function fetchUsers() {
+  async function fetchPosts() {
     const res = await axiosClient.get("/posts");
     return res.data;
-    }
-  const { data, error, isError, isLoading } = useQuery(['post'], fetchUsers)
+  }
+  const { data: posts, isLoading } = useQuery(['posts'], fetchPosts)
   const title = "Posts";
   const getTitle = () => {
     return title;
@@ -183,7 +189,7 @@ function Post() {
         <Space size="middle">
           <Link
             to={{
-              pathname: "/users/edit/" + record.id,
+              pathname: "/posts/edit/" + record.id,
             }}
           >
             Update
@@ -196,7 +202,7 @@ function Post() {
             okText="Yes"
             cancelText="No"
           >
-            <a href="javascript:;">Delete</a>
+            <Link>Delete</Link>
           </Popconfirm>
         </Space>
       ),
@@ -221,13 +227,13 @@ function Post() {
         <Flex justify="space-between">
           <h1>Danh sách post</h1>{" "}
           <Button>
-            <Link to="/post/create">Tạo Post</Link>
+            <Link to="/posts/create">Tạo Post</Link>
           </Button>
         </Flex>
         <Table
           columns={columns}
           rowKey={(record) => record.id}
-          dataSource={data}
+          dataSource={posts}
         />
       </div>
     </>

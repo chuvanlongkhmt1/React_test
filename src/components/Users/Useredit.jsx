@@ -65,9 +65,9 @@ function Useredit() {
               label="Nhóm">
               <Select>
                 {groupuser.map((option) => (
-                  <Option key={option.id} value={option.id}>
+                  <Select.Option key={option.id} value={option.id}>
                     {option.name}
-                  </Option>
+                  </Select.Option>
                 ))}
               </Select>
             </Form.Item>
